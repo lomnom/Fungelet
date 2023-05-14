@@ -52,10 +52,11 @@ class Instruction:
 		self.symbol=symbol
 		self.description=description
 		self.name=name
-		def defaultTransform(instr,delta,pos):
+		def defaultTransform(instr,delta,pos,space):
 			yield (delta,pos+delta)
-		self._transform=defaultTransfom
+		self._transform=defaultTransform
 		self._run=None
+		self.zeroTick=False
 
 	def runner(self,func):
 		self._run=func
@@ -66,8 +67,8 @@ class Instruction:
 	def transformer(self,func): #next position possibilities
 		self._transform=func
 
-	def transforms(self,delta,position):
-		yield from self._transform(self,delta,position)
+	def transforms(self,delta,position,space):
+		yield from self._transform(self,delta,position,space)
 
 class FungeExitedException(BaseException):
 	pass
@@ -82,6 +83,8 @@ class Pointer:
 
 	def step(self):
 		self.funge.instr(self.funge.plane[self.pos],self) #instruction does the moving
+		while self.funge.instrs[(currentCell:=self.funge.plane[self.pos])].zeroTick:
+			self.funge.instr(currentCell,self)
 
 	def stackPop(self):
 		if self.stack:
@@ -202,7 +205,7 @@ class Space2d(Space):
 				result[pointer.pos.y-y][pointer.pos.x-x]="P" #add pointers
 
 				#render forecasts
-				for delta,forecast in pointer.funge.instrs[self[pointer.pos]].transforms(pointer.delta,pointer.pos):
+				for delta,forecast in pointer.funge.instrs[self[pointer.pos]].transforms(pointer.delta,pointer.pos,self):
 					if visible(forecast):
 						result[forecast.y-y][forecast.x-x]={
 							Vect2d(1,0):'→',Vect2d(0,1):'↓',Vect2d(-1,0):"←",Vect2d(0,-1):"↑"
@@ -216,42 +219,66 @@ class Space2d(Space):
 
 ######### instructions for 2d-befunge
 import random
-class BfPointer(Pointer):
-	def step(self):
-		currentCell=self.funge.plane[self.pos]
-		if not currentCell==self.funge.plane.defaultValue:
-			self.funge.instr(self.funge.plane[self.pos],self) #instruction does the moving
-
-		corner,size=self.funge.plane.limits()
-		outside=lambda: self.pos>(size+corner) or self.pos<corner
-
-		while self.funge.plane[self.pos]==self.funge.plane.defaultValue: #wrapping
-			self.pos+=self.delta # keep moving till instruction
-			if outside():	
-				while outside():
-					self.pos-=self.delta #backtrack till back inside 
-
-				landing=None
-				while not (self.pos>(size+corner) or self.pos<corner): #when inside, backtrack to other end
-					self.pos-=self.delta
-					if self.funge.plane[self.pos]!=self.funge.plane.defaultValue: #take note of instructions on path
-						landing=self.pos.copy()
-
-				self.pos=landing #land on last seen instruction
-
-				if not landing:
-					raise ValueError("Infinite wrap loop (No instructions on the IP path)")
-				break 
 befunge2d={
 }
 def befunge2dInstr(instruction):
 	befunge2d[ord(instruction.symbol)]=instruction
 
-nothing=Instruction(chr(Space2d.defaultValue),"Space","Does nothing, skipped over")
+def wrap(delta,pos,space):
+	corner,size=space.limits()
+	outside=lambda: pos>(size+corner) or pos<corner
+
+	while space[pos]==space.defaultValue: #wrapping
+		pos+=delta # keep moving till instruction
+		if outside():	
+			while outside():
+				pos-=delta #backtrack till back inside 
+
+			landing=None
+			while not outside(): #when inside, backtrack to other end
+				pos-=delta
+				if space[pos]!=space.defaultValue: #take note of instructions on path
+					landing=pos.copy()
+
+			if landing:
+				pos=landing #land on last seen instruction
+
+			break 
+	return (delta,pos)
+
+nothing=Instruction(chr(Space2d.defaultValue),"Space","Does nothing, skipped over (in 0 ticks)")
+nothing.zeroTick=True
 @nothing.runner
 def run(instr,funge,pointer):
-	raise ValueError("This should not happen")
+	pointer.delta,pointer.pos=wrap(pointer.delta,pointer.pos,funge.plane)
+
+@nothing.transformer
+def transforms(instr,delta,position,space):
+	yield wrap(delta,pos,space)
 befunge2dInstr(nothing)
+
+def jump(delta,pos,space,jmpChr):
+	corner,size=space.limits()
+	outside=lambda: pos>(size+corner) or pos<corner
+	if space[pos]==jmpChr:
+		pos+=delta
+		while space[pos]!=jmpChr:
+			pos+=delta
+			if outside():
+				delta,pos=wrap(delta,pos,space)
+		pos+=delta
+	return (delta,pos)
+
+jumpOver=Instruction(';',"Jump Over","Jump to cell after the next Jump Over in path (takes 0 ticks)")
+jumpOver.zeroTick=True
+@jumpOver.runner
+def run(instr,funge,pointer):
+	pointer.delta,pointer.pos=jump(pointer.delta,pointer.pos,funge.plane,ord(';'))
+
+@jumpOver.transformer
+def transforms(instr,delta,position,space):
+	yield jump(delta,pos,space,ord(';'))
+befunge2dInstr(jumpOver)
 
 nop=Instruction('z',"Nop","Does nothing, but not skipped over")
 @nop.runner
@@ -267,7 +294,7 @@ def dirChgInstr(char,name,description,change):
 		pointer.pos+=pointer.delta
 
 	@direction.transformer
-	def transforms(instr,delta,position):
+	def transforms(instr,delta,position,space):
 		newDelta=change(delta)
 		yield (newDelta,position+newDelta)
 	befunge2dInstr(direction)
@@ -315,7 +342,7 @@ def run(instr,funge,pointer):
 	pointer.pos+=pointer.delta
 
 @goAway.transformer
-def transforms(instr,delta,position):
+def transforms(instr,delta,position,space):
 	for direction in instr.directions:
 		yield (direction,position+direction)
 befunge2dInstr(goAway)
@@ -329,8 +356,31 @@ def run(instr,funge,pointer):
 	pointer.pos+=pointer.delta
 
 @setDelta.transformer
-def transforms(instr,delta,position):
+def transforms(instr,delta,position,space):
 	return
 	yield
 befunge2dInstr(setDelta)
 
+# Control flow
+trampoline=Instruction('#',"Trampoline","Skip over next cell in path")
+@trampoline.runner
+def run(instr,funge,pointer):
+	pointer.pos+=pointer.delta*2
+
+@trampoline.transformer
+def transforms(instr,delta,position,space):
+	yield (delta,position+(delta*2))
+befunge2dInstr(trampoline)
+
+exit=Instruction('@',"Stop","Kill current IP")
+@exit.runner
+def run(instr,funge,pointer):
+	funge.pointers.pop(funge.pointers.index(pointer))
+	if not funge.pointers:
+		raise FungeExitedException
+
+@exit.transformer
+def transforms(instr,delta,position,space):
+	return
+	yield
+befunge2dInstr(exit)

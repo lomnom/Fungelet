@@ -48,7 +48,7 @@ class Space: # fungespace
 		return (smallestCoord,size) #2 vectors of size and smallest coordinates
 
 class Instruction:
-	def __init__(self,symbol,name,description):
+	def __init__(self,symbol,name,description,theme):
 		self.symbol=symbol
 		self.description=description
 		self.name=name

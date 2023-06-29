@@ -33,7 +33,7 @@ def showFunge(funge,pointer):
 	if pointer.mode==0:
 		print((instr:=funge.instrs[funge.plane[pointer.pos]]).name,">",instr.description)
 	else:
-		print("In stringMode, push to stack")
+		print("In stringMode - push to stack")
 
 showFunge(funge,pointer)
 
@@ -99,28 +99,30 @@ class Cell:
 	def __hash__(self):
 		return hash((self.delta,self.pos))
 
-def shallowize(root,rootDepth,visited=None):
+def shallowize(root,rootDepth,visited=None): #change depth of a cell and its children
+	if visited and root in visited:
+		return
 	if visited==None:
 		visited={root}
-	if root in visited:
-		return
+	else:
+		visited.add(root)
 	for after in root.after:
 		after.depth=rootDepth+1
 		shallowize(after,rootDepth+1,visited)
 
+#every Cell has the lowest possible depth. A cell object exists for all deltas of a position.
 def _generatePathTree(pos,delta,plane,traversed,instrs,depthLimit,depth=0) -> Cell:
 	here=Cell(depth,pos,delta)
 	if pos in traversed: #traversed is {pos:{delta:[depth,cell], ...}}
-		cells=traversed[pos]
-		if delta in cells:
-			tdepth,tcell=cells[delta]
-			if tdepth<=depth:
-				return tcell
-			else:
-				shallowize(tcell,depth)
-		else:
+		cells=traversed[pos] #other paths on this position
+		if delta in cells: #get all paths moving in the same direction
+			tdepth,tcell=cells[delta] 
+			if tdepth>depth: #make the path shallower as shallower route found
+				shallowize(tcell,depth) 
+			return tcell
+		else: # if not path on same direction, create new one
 			cells[delta]=[depth,here]
-	else:
+	else: #if no path, create one.
 		traversed[pos]={}
 		traversed[pos][delta]=[depth,here]
 
@@ -147,13 +149,12 @@ def fromTo(start,end,step=1): #inclusive range
 	start,end=(start,end) if end>=start else (end,start)
 	yield from range(start,end+1,step)
 
-pathDepth=24
-def markers():
-	def cursorMod(char):
-		char.flags|={'r'}
-
+pathDepth=36
+darkness=13
+gradient=10
+def pathMarkers():
 	def path(depth):
-		color=244-round((depth/pathDepth)*12)+1
+		color=255-darkness-round((depth/pathDepth)*gradient)
 		if color==256:
 			color=231
 		color=str(color)
@@ -173,7 +174,15 @@ def markers():
 					yield (x,cell.prev.pos.y,path(smallestDepth-1))
 				for y in fromTo(cell.prev.pos.y,cell.pos.y):
 					yield (cell.pos.x,y,path(smallestDepth-1))
+
+def cursorMarker():
+	def cursorMod(char):
+		char.flags|={'r'}
 	yield (cursor.x,cursor.y,cursorMod)
+
+def markers():
+	yield from pathMarkers()
+	yield from cursorMarker()
 
 ## status text
 class StatusText(tui.GenElement):

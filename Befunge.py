@@ -38,6 +38,11 @@ quotes=Instruction('"',"String mode","Toggle string mode","Strings")
 def run(instr,funge,pointer):
 	pointer.pos+=pointer.delta
 	pointer.mode=1 if pointer.mode==0 else 0
+
+@quotes.transformer
+def transforms(instr,delta,position,space): #TODO: support transforms with special modes
+	return
+	yield
 befunge2dInstr(quotes)
 
 debug=Instruction('D',"Debug","Print 'Debug' to stdout","Debug")
@@ -104,22 +109,28 @@ def wrap(delta,pos,space):
 			pos+=delta
 
 		if currentPlace==0 and negated:
+			while not outsideField(pos,size,corner):
+				pos+=delta
+			pos-=delta
 			delta=-delta #go to infield finder
 		elif currentPlace!=0:
 			return starting #went to other sector, will never hit field
 
 	if not outsideField(pos,size,corner):
 		while not outsideField(pos,size,corner): #find instruction in front
-			pos+=delta
 			if space[pos]!=space.defaultValue:
 				return (delta,pos)
+			pos+=delta
+		# if reached here, need to wrap to other side.
 		pos-=delta
-		delta=-delta
+		while not outsideField(pos,size,corner):
+			pos-=delta
+		pos+=delta
+
 		while not outsideField(pos,size,corner): #find instruction behind
-			pos+=delta
 			if space[pos]!=space.defaultValue:
-				delta=-delta
 				return (delta,pos)
+			pos+=delta
 		return starting #no instruction found
 
 nothing=Instruction(chr(Space2d.defaultValue),"Space","Does nothing, skipped over (in 0 ticks)","Nothing")

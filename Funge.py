@@ -49,6 +49,7 @@ class Space: # fungespace
 
 class Instruction:
 	def __init__(self,symbol,name,description,theme):
+		self.theme=theme
 		self.symbol=symbol
 		self.description=description
 		self.name=name
@@ -69,6 +70,19 @@ class Instruction:
 
 	def transforms(self,delta,position,space):
 		yield from self._transform(self,delta,position,space)
+
+def nextPlaces(pos,delta,instrs,plane):
+	nextPlaces=list(instrs[plane[pos]].transforms(delta,pos,plane))
+	changed=True
+	while changed:
+		changed=False
+		for index,nextPlace in reversed(list(enumerate(nextPlaces))):
+			nextDelta,nextPos=nextPlace
+			nextInstr=instrs[plane[nextPos]]
+			if nextInstr.zeroTick:
+				changed=True
+				nextPlaces=nextPlaces[:index]+list(nextInstr.transforms(nextDelta,nextPos,plane))+nextPlaces[index+1:]
+	return nextPlaces
 
 class FungeExitedException(BaseException):
 	pass

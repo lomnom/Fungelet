@@ -1,50 +1,48 @@
 import TermUI as tui
+import TermCanvas as tc
+import Terminal as trm
 import TermIntr as ti
-import Funge as f3e
-from Befunge import befunge2d as bf
-colorScheme={
-	'Termination':"1", 
-	'Delta': "2",
-	'Delta+': "3", 
-	'Logic':"4",
-	'Position':"5", 
-	'Math':"6", 
-	'Value':"7", 
-	'Stack':"159",
-	'Nothing':"8", 
-	'I/O':"214",
+from threading import Thread,Lock
 
-	'Funge Space':"11",  
-	'Debug':"12", 
-	'Strings':"13", 
-	'Concurrency':"10", 
-	'Repetition':"15", 
-}
+thread=None
+root=None
+stack=tui.ZStack()
+intr=ti.Group()
 
-class BfSpaceDisplay(tui.Element):
-	def __init__(self,space,where=lambda rx,ry,ph,pw: (-10,-5),markers=lambda: []): #x and y are canvas coordinates of rendered top left
-		self.space=space
-		self.where=where
-		self.markers=markers
+def addElem(element):
+	stack.insertChild(element,0)
+	root.frames.schedule(0,tui.sched.framesLater)
 
-	def size(self):
-		return (0,0)
+def removeElem(element):
+	stack.disownChild(element)
+	root.frames.schedule(0,tui.sched.framesLater)
 
-	def render(self,cnv,rx,ry,ph,pw):
-		cx,cy=self.where(rx,ry,ph,pw)
-		for y in range(ph):
-			row=self.space.matrix.get(cy+y)
-			if row:
-				for x in range(pw):
-					character=row.get(cx+x)
-					if character:
-						rendered=cnv.matrix[ry+y][rx+x]
-						rendered.char=chr(character)
-						if character in bf:
-							instruction=bf[character]
-							rendered.fcolor=colorScheme[instruction.theme]
-		for marker in self.markers():
-			mx,my,func=marker
-			if (cx+pw)>mx>=(cx) and (cy+ph)>my>=(cy):
-				rendered=cnv.matrix[ry+(my-cy)][rx+(mx-cx)]
-				func(rendered)
+def addIntr(added):
+	intr.addIChild(added)
+
+def removeIntr(added):
+	intr.orphanIChild(added)
+
+def modInit(modules,config,lock):
+	global thread
+	completed=Lock()
+	completed.acquire()
+	def main(cnv):
+		global root,stack,intr
+		nonlocal modules,completed
+		root=tui.Root(
+			cnv,
+			stack
+		)
+
+		intrRoot=ti.IntrRoot(
+			root.frames,
+			intr
+		)
+
+		completed.release()
+		modules.quitlock.quitLock.waitUnlock()
+
+	thread=Thread(target=tc.canvasApp,args=(main,))
+	thread.start()
+	completed.acquire()

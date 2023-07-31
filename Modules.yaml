@@ -1,0 +1,14 @@
+prefix: Mod
+modules:
+- QuitLock
+- UI
+- StatusText
+- Sidebar
+
+- Quit
+
+- Load
+- FungeScreen
+- Cursor
+
+- Offset

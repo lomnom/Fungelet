@@ -1,0 +1,33 @@
+Quit:
+  quitKey: "ctrl w"
+
+Sidebar:
+  next: "ctrl right"
+  prev: "ctrl left"
+
+Highlight:
+  Concurrency: '10'
+  Debug: '12'
+  Delta: '2'
+  Delta+: '3'
+  Funge Space: '11'
+  I/O: '214'
+  Logic: '4'
+  Math: '6'
+  Nothing: '8'
+  Position: '5'
+  Repetition: '15'
+  Stack: '159'
+  Strings: '13'
+  Termination: '1'
+  Value: '7'
+
+Cursor:
+  Up: "up"
+  Down: "down"
+  Left: "left"
+  Right: "right"
+  Step: "\n"
+
+FungeScreen:
+  OriginMarker: true

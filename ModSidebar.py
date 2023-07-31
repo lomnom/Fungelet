@@ -33,6 +33,13 @@ def selectSidebarI(index):
 	intrs.select(index)
 	elems.switchTo(index)
 
+class SidebarPos(tui.GenElement):
+	def __init__(self,scroller):
+		self.scroller=scroller
+
+	def innards(self):
+		return tui.Text(f"(at {self.scroller.position+1}/{len(self.scroller.values)})")
+
 intrs=None
 elems=None
 scroller=None
@@ -41,6 +48,7 @@ def modInit(modules,config,lock):
 	intrs=ti.Switcher(None)
 	elems=tui.ElementSwitcher(visible=None)
 	scroller=ti.Roller([],0,"horizontal",up=config["next"],down=config["prev"])
+	tracker=SidebarPos(scroller)
 
 	@scroller.onChange
 	def scroll(pos,val):
@@ -48,12 +56,17 @@ def modInit(modules,config,lock):
 		elems.switchTo(pos)
 
 	modules.ui.addElem(
-		tui.HStack(
-			tui.Seperator("vertical",tui.lines.dotted.v),
-			tui.VStack(
-				scroller.align(alignH="middle").pad(right=2,left=2),
-				elems.align(alignH="middle")
-			).align(alignH="middle")
+		tui.VStack(
+			tui.HStack(
+				tui.Text("*|Sidebars|*").pad(right=1),
+				tracker
+			).align(alignH="middle"),
+			scroller.align(alignH="middle")
+				.pad(right=2,left=2),
+			tui.Seperator("horizontal",tui.lines.dotted.h,style="`")
+				.pad(left=1,right=1),
+			elems
+				.pad(left=2,right=2)
 		).align(alignH="right")
 	)
 

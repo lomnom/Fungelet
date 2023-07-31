@@ -176,6 +176,11 @@ class Space2d(Space):
 		self.maxX,self.maxY=0,0
 		self.minX,self.minY=0,0
 
+	def clear(self):
+		self.matrix={}
+		self.maxX,self.maxY=0,0
+		self.minX,self.minY=0,0
+
 	def __getitem__(self,coord):
 		row=self.matrix.get(coord.y)
 		return row.get(coord.x,self.defaultValue) if row else self.defaultValue

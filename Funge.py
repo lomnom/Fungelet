@@ -78,6 +78,8 @@ def nextPlaces(pos,delta,instrs,plane):
 		changed=False
 		for index,nextPlace in reversed(list(enumerate(nextPlaces))):
 			nextDelta,nextPos=nextPlace
+			if nextPos==pos:
+				break
 			nextInstr=instrs[plane[nextPos]]
 			if nextInstr.zeroTick:
 				changed=True

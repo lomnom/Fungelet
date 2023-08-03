@@ -11,9 +11,9 @@ instrs=bfg.befunge2d
 def updateInfo(delta,coords,plane,instrs):
 	statusText.setLingering(f"At ({coords.x},{coords.y}), moving ({delta.x},{delta.y})")
 	try:
-		statusText.queueText(instrs[plane[coords]].description)
+		statusText.queueText("\033"+instrs[plane[coords]].description+"\033")
 	except KeyError:
-		statusText.clear(root.frames)
+		statusText.clear()
 
 movement=ti.Listener()
 @movement.handle

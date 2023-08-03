@@ -40,6 +40,9 @@ class StatusText(tui.GenElement):
 def setLingering(text):
 	statusText.setLingering(text,frames)
 
+def clear():
+	statusText.clear(frames)
+
 def queueText(text,seconds=3):
 	statusText.queueText(text,frames,seconds=seconds)
 

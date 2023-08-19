@@ -9,6 +9,7 @@ modules:
 
 - Load
 - FungeScreen
-- Cursor
+- Highlight
+- Paths
 
-- Offset
+- Cursor

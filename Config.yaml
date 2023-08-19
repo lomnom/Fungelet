@@ -1,3 +1,7 @@
+UI:
+  CtrlCSigint: true # for debug
+  ExplosionKey: null #crash with stack traces (debug)
+
 Quit:
   quitKey: "ctrl w"
 
@@ -6,21 +10,28 @@ Sidebar:
   prev: "ctrl left"
 
 Highlight:
-  Concurrency: '10'
-  Debug: '12'
-  Delta: '2'
-  Delta+: '3'
-  Funge Space: '11'
-  I/O: '214'
-  Logic: '4'
-  Math: '6'
-  Nothing: '8'
-  Position: '5'
-  Repetition: '15'
-  Stack: '159'
-  Strings: '13'
-  Termination: '1'
-  Value: '7'
+  Scheme:
+    Concurrency: '10'
+    Debug: '12'
+    Delta: '2'
+    Delta+: '3'
+    Funge Space: '11'
+    I/O: '214'
+    Logic: '4'
+    Math: '6'
+    Nothing: '8'
+    Position: '5'
+    Repetition: '15'
+    Stack: '159'
+    Strings: '13'
+    Termination: '1'
+    Value: '7'
+
+  Toggle: "ctrl h"
+  DefaultEnable: true
+
+Paths:
+  Toggle: "ctrl p"
 
 Cursor:
   Up: "up"

@@ -58,7 +58,7 @@ def save(*args):
 		cb(file)
 
 def modInit(m,config,lock):
-	global funge,modules
+	global funge,modules,sidebar
 	modules=m
 	here=pathlib.Path(".")
 	here=list(here.glob("*.b98"))

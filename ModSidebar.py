@@ -38,7 +38,11 @@ class SidebarPos(tui.GenElement):
 		self.scroller=scroller
 
 	def innards(self):
-		return tui.Text(f"(at {self.scroller.position+1}/{len(self.scroller.values)})")
+		pos=self.scroller.position
+		if pos is not None:
+			return tui.Text(f"(at {self.scroller.position+1}/{len(self.scroller.values)})")
+		else:
+			return tui.Text(f"(No sidebars!)")
 
 intrs=None
 elems=None
@@ -47,7 +51,7 @@ def modInit(modules,config,lock):
 	global intrs,elems,scroller
 	intrs=ti.Switcher(None)
 	elems=tui.ElementSwitcher(visible=None)
-	scroller=ti.Roller([],0,"horizontal",up=config["next"],down=config["prev"])
+	scroller=ti.Roller([],None,"horizontal",up=config["next"],down=config["prev"])
 	tracker=SidebarPos(scroller)
 
 	@scroller.onChange

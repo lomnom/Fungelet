@@ -14,12 +14,14 @@ enabled=None
 def disable(quiet=False):
 	global enabled
 	modules.fungescreen.display.modifiers.remove(highlightMod)
+	modules.ui.root.frames.schedule(0,tui.sched.framesLater)
 	quiet or modules.statustext.queueText("Highlighting disabled")
 	enabled=False
 
 def enable(quiet=False):
 	global enabled
 	modules.fungescreen.display.modifiers.append(highlightMod)
+	modules.ui.root.frames.schedule(0,tui.sched.framesLater)
 	quiet or modules.statustext.queueText("Highlighting enabled")
 	enabled=True
 

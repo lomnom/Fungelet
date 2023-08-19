@@ -5,7 +5,7 @@ class StatusText(tui.GenElement):
 		self.text=tui.Text("")
 		self.vanishing=""
 		self.lingering=""
-		self.showing=0
+		self.counter=0
 
 	def _updateText(self):
 		if self.lingering and self.vanishing:
@@ -14,11 +14,19 @@ class StatusText(tui.GenElement):
 			self.text.text=self.lingering+self.vanishing
 
 	def queueText(self,text,frames,seconds=3):
+		self.counter+=1
 		self.vanishing=text
 		self._updateText()
-		self.showing+=1
 		frames.schedule(0,tui.sched.framesLater)
-		frames.schedule(seconds,tui.sched.secondsLater,callback=self.clear)
+		counter=self.counter
+		def conditionalClear(frames):
+			nonlocal self,counter
+			if self.counter==counter:
+				self.vanishing=""
+				self._updateText()
+			else:
+				return tui.NoFrame
+		frames.schedule(seconds,tui.sched.secondsLater,callback=conditionalClear)
 
 	def setLingering(self,text,frames):
 		self.lingering=text
@@ -26,10 +34,8 @@ class StatusText(tui.GenElement):
 		frames.schedule(0,tui.sched.framesLater)
 
 	def clear(self,frames):
-		self.showing-=1
-		if self.showing==0:
-			self.vanishing=""
-			self._updateText()
+		self.vanishing=""
+		self._updateText()
 
 	def size(self):
 		return self.text.size()

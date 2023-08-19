@@ -23,10 +23,15 @@ def addIntr(added):
 def removeIntr(added):
 	intr.orphanIChild(added)
 
+
 def modInit(modules,config,lock):
-	global thread
+	global thread,explosionKey
 	completed=Lock()
 	completed.acquire()
+
+	if not config["CtrlCSigint"]:
+		tc.NOCTRLC_CANVAS=True
+
 	def main(cnv):
 		global root,stack,intr
 		nonlocal modules,completed
@@ -46,3 +51,12 @@ def modInit(modules,config,lock):
 	thread=Thread(target=tc.canvasApp,args=(main,))
 	thread.start()
 	completed.acquire()
+
+	addElem(tui.FrameRoller().align(alignV="bottom",alignH="right"))
+
+	explosionKey=ti.Button("explode",config["ExplosionKey"])
+	addIntr(explosionKey)
+
+	@explosionKey.onToggle
+	def boom(*_):
+		raise StopIteration

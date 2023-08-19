@@ -7,7 +7,7 @@ import pathlib
 
 fileIn=ti.Textbox("ctrl l")
 loadButton=ti.Button("load","L")
-saveButton=ti.Button("load","S")
+saveButton=ti.Button("save","S")
 
 onLoad=[]
 onSave=[]

@@ -8,39 +8,54 @@ cursor=fng.Vect2d(0,0)
 cursorDelta=fng.Vect2d(1,0)
 instrs=bfg.befunge2d
 
-def updateInfo(delta,coords,plane,instrs):
+def updateInfo(delta,coords):
 	statusText.setLingering(f"At ({coords.x},{coords.y}), moving ({delta.x},{delta.y})")
 	try:
 		statusText.queueText("\033"+instrs[plane[coords]].description+"\033")
 	except KeyError:
 		statusText.clear()
 
+def goto(c,d):
+	global cursorDelta, cursor
+	cursorDelta=d
+	cursor=c
+	updateInfo(cursorDelta,cursor)
+	for callback in callbacks:
+		callback(c,d)
+
 movement=ti.Listener()
 @movement.handle
 def key(key):
-	global cursor,cursorDelta
 	root.frames.schedule(
 		1,tui.sched.framesLater
 	)
 	if key==cfg["Step"]:
 		try:
-			cursorDelta,cursor=fng.nextPlaces(cursor,cursorDelta,instrs,plane)[0]
+			d,c=fng.nextPlaces(cursor,cursorDelta,instrs,plane)[0]
+			goto(c,d)
 		except:
 			pass
-		updateInfo(cursorDelta,cursor,plane,instrs)
 		return
 	elif key==cfg["Up"]:
-		cursorDelta=fng.Vect2d(0,-1)
+		d=fng.Vect2d(0,-1)
 	elif key==cfg["Down"]:
-		cursorDelta=fng.Vect2d(0,1)
+		d=fng.Vect2d(0,1)
 	elif key==cfg["Left"]:
-		cursorDelta=fng.Vect2d(-1,0)
+		d=fng.Vect2d(-1,0)
 	elif key==cfg["Right"]:
-		cursorDelta=fng.Vect2d(1,0)
+		d=fng.Vect2d(1,0)
 	else:
 		return
-	cursor+=cursorDelta
-	updateInfo(cursorDelta,cursor,plane,instrs)
+	c=d+cursor
+	goto(c,d)
+
+callbacks=[]
+def addCallback(cb):
+	global callbacks
+	callbacks.append(cb)
+
+def removeCallback(cb):
+	callbacks.remove(cb)
 
 def cursorCenter(x,y,ph,pw): #align canvas so cursor is in middle
 	return (cursor.x-(pw//2),cursor.y-(ph//2))

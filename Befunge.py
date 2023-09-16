@@ -474,10 +474,13 @@ def run(instr,funge,pointer):
 befunge2dInstr(get)
 
 # stdin & stdout TODO: act like r if fail
-OUTNUM=lambda n: print(n) 
-INNUM=lambda: int(input())
-OUTCHAR=lambda c: print(chr(c))
-INCHAR=lambda: ord(input()[0])
+stdout=print
+stdin=input
+
+OUTNUM=lambda n: stdout(n) 
+INNUM=lambda: int(stdin())
+OUTCHAR=lambda c: stdout(chr(c))
+INCHAR=lambda: ord(stdin()[0])
 
 outNum=Instruction('.',"Output Decimal","Pops and prints the number.","I/O")
 @outNum.runner

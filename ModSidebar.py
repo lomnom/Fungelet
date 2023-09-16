@@ -76,4 +76,3 @@ def modInit(modules,config,lock):
 
 	modules.ui.addIntr(scroller)
 	modules.ui.addIntr(intrs)
-	pass

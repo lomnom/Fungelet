@@ -22,7 +22,11 @@ class BfSpaceDisplay(tui.Element):
 					character=row.get(cx+x)
 					if character:
 						rendered=cnv.matrix[ry+y][rx+x]
-						rendered.char=chr(character)
+						if 32<=character<=126: #ascii normal character
+							rendered.char=chr(character)
+						else:
+							rendered.char="?"
+							rendered.flags|={'i','f'}
 						for modifier in self.modifiers:
 							modifier(rendered,(x,y),(cy+y,cx+x),(cy,cx))
 

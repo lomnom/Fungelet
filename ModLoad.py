@@ -49,7 +49,7 @@ def load(*args):
 @saveButton.onPress
 def save(*args):
 	global funge
-	tlc,size=funge.limits()[0]
+	tlc,size=funge.plane.limits()
 	file=fileIn.text
 
 	raise NotImplementedError

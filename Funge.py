@@ -91,8 +91,12 @@ class FungeExitedException(BaseException):
 
 def step(self): #must be mode #0
 	self.funge.instr(self.funge.plane[self.pos],self) #instruction does the moving
+	oldCell=None
 	while self.mode==0 and self.funge.instrs[(currentCell:=self.funge.plane[self.pos])].zeroTick:
+		if currentCell==oldCell:
+			break
 		self.funge.instr(currentCell,self)
+		oldCell=currentCell
 
 class Pointer:
 	steppers=(step,)

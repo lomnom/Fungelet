@@ -9,7 +9,7 @@ cursorDelta=fng.Vect2d(1,0)
 instrs=bfg.befunge2d
 
 def updateInfo(delta,coords):
-	statusText.setLingering(f"At ({coords.x},{coords.y}), moving ({delta.x},{delta.y})")
+	statusText.setLingering(f"At ({coords.x},{coords.y}) = {plane[coords]}, moving ({delta.x},{delta.y})")
 	try:
 		statusText.queueText("\033"+instrs[plane[coords]].description+"\033")
 	except KeyError:

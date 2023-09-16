@@ -16,3 +16,6 @@ class CatchLock:
 		if self._lock.locked():
 			self._lock.acquire()
 			self._lock.release()
+
+	def locked(self):
+		return self._lock.locked()

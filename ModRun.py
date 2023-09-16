@@ -1,20 +1,35 @@
 import TermUI as tui 
 import TermIntr as ti
 from threading import Thread
-
-#todo: stimulation async in another thread
-#todo: statusText
-#todo: step buttons c+r c+x
+from time import sleep
 
 executing=False
+funge=None
+quitLock=None
 
-def run(rate):
-	pass
+def runner(delay):
+	while executing and quitLock.locked(): #todo: implement using stopwatch
+		sleep(delay)
+		funge.step()
+		renderer()
+
+def run(delay):
+	global executing
+	if executing: return
+	executing=True
+	Thread(target=runner,args=(delay,)).start()
+
+def stop():
+	global executing
+	if not executing: return
+	executing=False
 
 listener=None
 def modInit(m,config,lock):
-	global funge,listener,executing
+	global funge,listener,executing,renderer,quitLock
 	funge=m.load.funge
+	renderer=lambda: m.ui.root.frames.schedule(0,tui.sched.framesLater)
+	quitLock=m.quitlock.quitLock
 
 	rateInput=ti.Textbox("ctrl l",text="15")
 
@@ -26,12 +41,18 @@ def modInit(m,config,lock):
 		tui.Text(config["RunKey"]+" anywhere to execute/halt")
 	)
 
-	sidebar=m.sidebar.sidebar("Run",visual,rateInput)
+	sidebar=m.sidebar.Sidebar("Run",visual,rateInput)
+	m.sidebar.addSidebar(sidebar)
 	
 	listener=ti.Listener()
 	@listener.handle
 	def handler(key):
+		global executing
 		if key==config["StepKey"]:
 			funge.step()
 		elif key==config["RunKey"]:
-			pass
+			if not executing:
+				run(1/float(rateInput.text))
+			else:
+				stop()
+	m.ui.addIntr(listener)

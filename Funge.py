@@ -71,7 +71,7 @@ class Instruction:
 	def transforms(self,delta,position,space):
 		yield from self._transform(self,delta,position,space)
 
-def nextPlaces(pos,delta,instrs,plane):
+def nextPlaces(pos,delta,instrs,plane,zerotick=True):
 	nextPlaces=list(instrs[plane[pos]].transforms(delta,pos,plane))
 	changed=True
 	while changed:
@@ -80,10 +80,11 @@ def nextPlaces(pos,delta,instrs,plane):
 			nextDelta,nextPos=nextPlace
 			if nextPos==pos:
 				break
-			nextInstr=instrs[plane[nextPos]]
-			if nextInstr.zeroTick:
-				changed=True
-				nextPlaces=nextPlaces[:index]+list(nextInstr.transforms(nextDelta,nextPos,plane))+nextPlaces[index+1:]
+			if zerotick:
+				nextInstr=instrs[plane[nextPos]]
+				if nextInstr.zeroTick:
+					changed=True
+					nextPlaces=nextPlaces[:index]+list(nextInstr.transforms(nextDelta,nextPos,plane))+nextPlaces[index+1:]
 	return nextPlaces
 
 class FungeExitedException(BaseException):
@@ -192,7 +193,7 @@ class Space2d(Space):
 		return row.get(coord.x,self.defaultValue) if row else self.defaultValue
 
 	def __setitem__(self,coord,value):
-		if value:
+		if value!=self.defaultValue:
 			row=self.matrix.setdefault(coord.y, {}) # TODO: optimise this dictionary allocation
 			row[coord.x]=value
 			if coord.x>self.maxX: self.maxX=coord.x
@@ -209,14 +210,20 @@ class Space2d(Space):
 			if val:
 				if not row:
 					del self.matrix[coord.y]
-					if coord.y==self.maxY:
-						self.maxY=max(self.matrix.values)
-					if coord.y==self.minY:
-						self.maxY=min(self.matrix.values)
-				if coord.x==self.maxX:
-					self.maxX=max([max(row) for row in self.matrix])
-				if coord.x==self.minX:
-					self.maxX=min([min(row) for row in self.matrix])
+					keys=self.matrix.keys()
+					if not keys:
+						self.maxY=0
+					elif coord.y==self.maxY:
+						self.maxY=max(keys)
+					elif coord.y==self.minY:
+						self.maxY=min(keys)
+				if self.matrix:
+					if coord.x==self.maxX:
+						self.maxX=max([max(row) for row in self.matrix.values()])
+					if coord.x==self.minX:
+						self.maxX=min([min(row) for row in self.matrix.values()])
+				else:
+					self.maxX=0
 
 	def __contains__(self,coord):
 		return (row:=self.matrix.get(coords.y,False)) and (coords.x in row)

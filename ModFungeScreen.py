@@ -4,11 +4,12 @@ from Befunge import befunge2d as bf
 
 #x and y are canvas coordinates of rendered top left
 class BfSpaceDisplay(tui.Element):
-	def __init__(self,space,where=lambda rx,ry,ph,pw: (0,0),markers=[],modifiers=[]): 
+	def __init__(self,space,where=lambda rx,ry,ph,pw: (0,0),markers=[],modifiers=[],uniqueBg=False): 
 		self.space=space
 		self.where=where
 		self.markers=markers
 		self.modifiers=modifiers
+		self.uniqueBg=uniqueBg
 
 	def size(self):
 		return (0,0)
@@ -24,8 +25,11 @@ class BfSpaceDisplay(tui.Element):
 						rendered=cnv.matrix[ry+y][rx+x]
 						if 32<=character<=126: #ascii normal character
 							rendered.char=chr(character)
+							if self.uniqueBg:
+								rendered.bcolor=str(character%256)
 						else:
 							rendered.char="?"
+							rendered.bcolor=str(character%256)
 							rendered.flags|={'i','f'}
 						for modifier in self.modifiers:
 							modifier(rendered,(x,y),(cy+y,cx+x),(cy,cx))

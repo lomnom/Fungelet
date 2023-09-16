@@ -23,6 +23,15 @@ def goto(c,d):
 	for callback in callbacks:
 		callback(c,d)
 
+def step():
+	try:
+		d,c=fng.nextPlaces(cursor,cursorDelta,instrs,plane,zerotick=False)[0]
+		moved=c!=cursor
+		goto(c,d)
+		return moved
+	except:
+		pass
+
 movement=ti.Listener()
 @movement.handle
 def key(key):
@@ -30,11 +39,7 @@ def key(key):
 		1,tui.sched.framesLater
 	)
 	if key==cfg["Step"]:
-		try:
-			d,c=fng.nextPlaces(cursor,cursorDelta,instrs,plane)[0]
-			goto(c,d)
-		except:
-			pass
+		step()
 		return
 	elif key==cfg["Up"]:
 		d=fng.Vect2d(0,-1)

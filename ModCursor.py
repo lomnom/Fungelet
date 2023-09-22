@@ -25,12 +25,12 @@ def goto(c,d):
 
 def step():
 	try:
-		d,c=fng.nextPlaces(cursor,cursorDelta,instrs,plane,zerotick=False)[0]
+		d,c=fng.nextPlaces(cursor,cursorDelta,instrs,plane,zerotick=(plane[cursor]==plane.defaultValue))[0]
 		moved=c!=cursor
 		goto(c,d)
 		return moved
-	except:
-		pass
+	except IndexError:
+		return False
 
 movement=ti.Listener()
 @movement.handle

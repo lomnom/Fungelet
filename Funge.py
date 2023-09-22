@@ -72,7 +72,10 @@ class Instruction:
 		yield from self._transform(self,delta,position,space)
 
 def nextPlaces(pos,delta,instrs,plane,zerotick=True):
-	nextPlaces=list(instrs[plane[pos]].transforms(delta,pos,plane))
+	item=plane[pos]
+	if item not in instrs:
+		return []
+	nextPlaces=list(instrs[item].transforms(delta,pos,plane))
 	changed=True
 	while changed:
 		changed=False
@@ -167,6 +170,9 @@ class Vect2d(Coord):
 
 	def __gt__(self,other):
 		return self.x>other.x or self.y>other.y
+
+	def __abs__(self):
+		return Vect2d(abs(self.x),abs(self.y))
 
 Vect2d.east=Vect2d(1,0)
 Vect2d.west=Vect2d(-1,0)

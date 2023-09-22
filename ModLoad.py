@@ -35,7 +35,7 @@ def loadBf(text,plane,sx,sy):
 				plane[fng.Vect2d(x+sx,row+sy)]=ord(char)
 
 @loadButton.onPress
-def load(*args):
+def load(*args): #todo: spawn relative to cursor
 	global funge
 	file=fileIn.text
 

@@ -69,8 +69,9 @@ def modInit(modules,config,lock):
 				.pad(right=2,left=2),
 			tui.Seperator("horizontal",tui.lines.dotted.h,style="`")
 				.pad(left=1,right=1),
-			elems
+			(elems
 				.pad(left=2,right=2)
+			,100)
 		).align(alignH="right")
 	)
 

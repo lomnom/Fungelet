@@ -52,86 +52,133 @@ def run(instr,funge,pointer):
 	pointer.pos+=pointer.delta
 befunge2dInstr(debug)
 
-# top,right,bottom,left 1234 tl,tr,br,bl 5678 inside 0
-def posInPlane(pos,corner,size):
-	brCorner=corner+size
-	if corner.x<=pos.x<=brCorner.x: #1,3 or 0
-		if pos.y<corner.y:
-			return 1
-		elif pos.y>brCorner.y:
-			return 3
-		else:
-			return 0
-	elif corner.y<=pos.y<=brCorner.y: # 2,4
-		if pos.x>brCorner.x:
-			return 2
-		else:
-			return 4
-	else: # 5,6,7,8
-		if pos.x>brCorner.x and pos.y>brCorner.y:
-			return 7
-		elif pos.x<corner.x and pos.y<corner.y:
-			return 5
-		elif pos.x<corner.x and pos.y>brCorner.y:
-			return 8
-		else:
-			return 6
-
 def outsideField(pos,size,corner):
 	return pos>(size+corner) or pos<corner
 
+#[a,b,c] for ax+by=c
+
+#a=(y2-y1), b=(x1-x2), c=ax1-by1
+def mkline(x1,y1,x2,y2):
+	a=(y2-y1)
+	b=(x1-x2)
+	c=a*x1 + b*y1
+	return [a,b,c]
+
+def equal(a,b):
+	v=[]
+	for an,bn in zip(a,b):
+		if an!=bn and (an==0 or bn==0):
+			return False
+		(an==bn==0 or v.append(an/bn))
+	return len(set(v))<=1
+
+class All: 
+	pass
+
+# a1x + b1y = c1, a2x + b2y = c2
+# y = (c1a2 - c2a1)/(b1a2 - b2a1)
+# x = (c1 - b1y)/a1
+def intersection(a,b):
+	n = ((a[1]*b[0]) - (b[1]*a[0]))
+	if n==0:
+		if equal(a,b):
+			return All
+		return None
+	y = ((a[2]*b[0]) - (b[2]*a[0])) / n 
+
+	n = ((a[0]*b[1]) - (b[0]*a[1]))
+	if n==0:
+		return None
+	x = ((a[2]*b[1]) - (b[2]*a[1])) / n
+	return [x,y]
+
+def intersections(by,lines):
+	results=[]
+	for line in lines:
+		result=intersection(line,by)
+		if result is not None:
+			results.append(result)
+	return results
+
+def rangeResults(x,y,h,w,results):
+	h-=1
+	w-=1
+	for result in results:
+		if result==All:
+			return True
+		elif (x+w)>=result[0]>=x and (y+h)>=result[1]>=y:
+			return True
+	return False
+
+def roundpp(val,chunk,offset,direction): #direction=1 if ceil else -1 for floor
+	chunk=abs(chunk)
+	val=val-offset+(direction*0.5*chunk)
+	diff=val%chunk
+	if diff>=(0.5*chunk):
+		return val+(chunk-diff)+offset
+	else:
+		return val-diff+offset
+
+ZEROVECT=Vect2d(0,0)
 def wrap(delta,pos,space):
 	corner,size=space.limits()
+	end=corner+(size-Vect2d(1,1))
 	if not space[pos]==space.defaultValue:
 		return (delta,pos)
 	starting=(delta.copy(),pos.copy())
-	sign=lambda n: (0 if n==0 else (-1 if n<0 else 1))
 
-	if outsideField(pos,size,corner): #go to position in field on pointer path 
-		place=posInPlane(pos,corner,size)
-		if ((place==3 or place==1) and delta.y==0) or ((place==4 or place==2) and delta.x==0) \
-		   or ((8>=place>=5) and (delta.y==0 or delta.x==0)) \
-		   or ((place==5 or place==7) and sign(delta.x)==-sign(delta.y)) \
-		   or ((place==6 or place==8) and sign(delta.x)==sign(delta.y)):
-			return starting #not diretctly facing or facing opposite field
-		if (place==1 and sign(delta.y)==-1) or (place==2 and sign(delta.x)==1) \
-		   or (place==3 and sign(delta.y)==1) or (place==4 and sign(delta.x)==-1) \
-		   or (place==5 and sign(delta.x)==-1 and sign(delta.y)==-1) \
-		   or (place==6 and sign(delta.x)==1 and sign(delta.y)==-1) \
-		   or (place==7 and sign(delta.x)==1 and sign(delta.y)==1) \
-		   or (place==8 and sign(delta.x)==-1 and sign(delta.y)==1):
-			delta=-delta
-			negated=True
+	if outsideField(pos,size,corner): 
+		#use coordinate geometry to check if line of path intersects box
+		topLine=mkline(corner.x,corner.y,end.x,corner.y)
+		bottomLine=mkline(corner.x,end.y,end.x,end.y)
+		leftLine=mkline(corner.x,corner.y,corner.x,end.y)
+		rightLine=mkline(end.x,corner.y,end.x,end.y)
+		box=[topLine,bottomLine,leftLine,rightLine]
+
+		pointerLine=mkline(pos.x,pos.y,pos.x+delta.x,pos.y+delta.y)
+
+		hits=intersections(pointerLine,box)
+		onCourse=rangeResults(corner.x,corner.y,size.x,size.y,hits)
+		if not onCourse:
+			return starting
+
+		hits=[Vect2d(coord[0],coord[1]) for coord in hits if coord!=All]
+		hits=sorted(hits,key=lambda v: abs(v-pos)) #small distance first
+		hit=hits[0] 
+
+
+		# use inequalities to check if moving towards or away
+		nextPos=pos+delta
+		diffDiff=abs(hit-nextPos)-abs(hit-pos) #positive is moving away
+
+		if diffDiff>ZEROVECT: #moving away
+			hit=hits[1] #use bigger distance (other side of board)
+		elif diffDiff<ZEROVECT: #moving towards
+			pass #use smaller distance (closer to pointer side)
+		else: #delta (0,0) lmao
+			return starting
+
+		# coord around start of wrapping
+		if delta.x:
+			x=roundpp(hit.x,delta.x,pos.x%delta.x,0)
 		else:
-			negated=False
+			x=hit.x
 
-		while (currentPlace:=posInPlane(pos,corner,size))==place:
+		if delta.y:
+			y=roundpp(hit.y,delta.y,pos.y%delta.y,0)
+		else:
+			y=hit.y
+
+		if outsideField(pos,size,corner):
 			pos+=delta
 
-		if currentPlace==0 and negated:
-			while not outsideField(pos,size,corner):
-				pos+=delta
-			pos-=delta
-			delta=-delta #go to infield finder
-		elif currentPlace!=0:
-			return starting #went to other sector, will never hit field
-
-	if not outsideField(pos,size,corner):
+		return (delta,Vect2d(int(x),int(y)))
+	else:
 		while not outsideField(pos,size,corner): #find instruction in front
 			if space[pos]!=space.defaultValue:
 				return (delta,pos)
 			pos+=delta
-		# if reached here, need to wrap to other side.
-		pos-=delta
-		while not outsideField(pos,size,corner):
-			pos-=delta
-		pos+=delta
-
-		while not outsideField(pos,size,corner): #find instruction behind
-			if space[pos]!=space.defaultValue:
-				return (delta,pos)
-			pos+=delta
-		return starting #no instruction found
+		return (delta,pos) #no instruction found
 
 nothing=Instruction(chr(Space2d.defaultValue),"Space","Does nothing, skipped over (in 0 ticks)","Nothing")
 nothing.zeroTick=True

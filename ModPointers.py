@@ -107,26 +107,30 @@ homeGroup=tui.VStack(
 	possessButton
 )
 
-class Stack(tui.GenElement):
+class Stack(tui.GenElement): #todo: have a less crude thread safety solution (stack is one render behind)
 	def __init__(self,pointer):
 		self.pointer=pointer
+		self.stack=pointer.stack
 
 	def innards(self):
-		stack=self.pointer.stack
+		stack=self.stack
 		numberString=""
 		for n in range(len(stack)):
 			numberString+=f"#{n+1}\n"
 		numberText=tui.Text(numberString[:-1])
 
 		characterString=""
-		for item in stack:
-			if 32<=item<=126: #ascii normal character
-				characterString+=chr(item)
-			elif item==10:
-				characterString+="↩" #newline
-			else:
-				characterString+="`-`"
-			characterString+="\n"
+		if stack:
+			for item in stack:
+				if 32<=item<=126: #ascii normal character
+					characterString+=chr(item)
+				elif item==10:
+					characterString+="↩" #newline
+				else:
+					characterString+="`-`"
+				characterString+="\n"
+		else:
+			characterString="Empty stack "
 		characterText=tui.Text(characterString[:-1])
 
 		valString=""
@@ -142,6 +146,10 @@ class Stack(tui.GenElement):
 			sep,
 			valText
 		)
+
+	def render(self,cnv,x,y,ph,pw):
+		self.innards().render(cnv,x,y,ph,pw)
+		self.stack=self.pointer.stack[:]
 
 class Inspector(tui.GenElement):
 	def __init__(self,pointer,collection):

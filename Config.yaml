@@ -42,3 +42,7 @@ Cursor:
 
 FungeScreen:
   OriginMarker: true
+
+Run:
+  StepKey: "ctrl r"
+  RunKey: "ctrl x"

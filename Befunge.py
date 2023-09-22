@@ -106,7 +106,7 @@ def rangeResults(x,y,h,w,results):
 	for result in results:
 		if result==All:
 			return True
-		elif (x+w)>=result[0]>=x and (y+h)>=result[1]>=y:
+		elif ((x+w)>=result[0]>=x) and ((y+h)>=result[1]>=y):
 			return True
 	return False
 
@@ -138,14 +138,13 @@ def wrap(delta,pos,space):
 		pointerLine=mkline(pos.x,pos.y,pos.x+delta.x,pos.y+delta.y)
 
 		hits=intersections(pointerLine,box)
-		onCourse=rangeResults(corner.x,corner.y,size.x,size.y,hits)
+		onCourse=rangeResults(corner.x,corner.y,size.y,size.x,hits)
 		if not onCourse:
 			return starting
 
 		hits=[Vect2d(coord[0],coord[1]) for coord in hits if coord!=All]
 		hits=sorted(hits,key=lambda v: abs(v-pos)) #small distance first
 		hit=hits[0] 
-
 
 		# use inequalities to check if moving towards or away
 		nextPos=pos+delta

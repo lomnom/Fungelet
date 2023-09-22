@@ -10,8 +10,10 @@ modules:
 - Load
 - FungeScreen
 - Highlight
-- Paths
+# - Paths
 
 - Cursor
 
 - Pointers
+- Run
+- Edit

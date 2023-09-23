@@ -177,7 +177,17 @@ def wrap(delta,pos,space):
 			if space[pos]!=space.defaultValue:
 				return (delta,pos)
 			pos+=delta
-		return (delta,pos) #no instruction found
+		delta=-delta
+		pos+=delta
+		while not outsideField(pos,size,corner): #go to other end
+			pos+=delta
+		delta=-delta
+		pos+=delta
+		while not outsideField(pos,size,corner): #find instruction at other end
+			if space[pos]!=space.defaultValue:
+				return (delta,pos)
+			pos+=delta
+		return starting #no instruction found
 
 nothing=Instruction(chr(Space2d.defaultValue),"Space","Does nothing, skipped over (in 0 ticks)","Nothing")
 nothing.zeroTick=True
@@ -209,7 +219,7 @@ def run(instr,funge,pointer):
 	pointer.delta,pointer.pos=jump(pointer.delta,pointer.pos,funge.plane,ord(';'))
 
 @jumpOver.transformer
-def transforms(instr,delta,position,space):
+def transforms(instr,delta,pos,space):
 	yield jump(delta,pos,space,ord(';'))
 befunge2dInstr(jumpOver)
 

@@ -1,5 +1,5 @@
 UI:
-  CtrlCSigint: true # for debug
+  CtrlCSigint: false # for debug
   ExplosionKey: null #crash with stack traces (debug)
 
 Quit:

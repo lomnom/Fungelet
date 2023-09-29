@@ -2,8 +2,14 @@ from Funge import *
 
 ######### instructions for 2d-befunge (https://github.com/catseye/Funge-98/blob/master/doc/funge98.markdown#instructions)
 import random
-befunge2d={
-}
+
+defaultInstr=None
+class Instructions(dict):
+	def __getitem__(self,item):
+		global defaultInstr
+		return super().get(item,defaultInstr)
+
+befunge2d=Instructions()
 def befunge2dInstr(instruction):
 	befunge2d[ord(instruction.symbol)]=instruction
 
@@ -123,16 +129,16 @@ ZEROVECT=Vect2d(0,0)
 def wrap(delta,pos,space):
 	corner,size=space.limits()
 	end=corner+(size-Vect2d(1,1))
-	if not space[pos]==space.defaultValue:
+	if (not space[pos]==space.defaultValue) or size==ZEROVECT:
 		return (delta,pos)
 	starting=(delta.copy(),pos.copy())
 
 	if outsideField(pos,size,corner): 
 		#use coordinate geometry to check if line of path intersects box
-		topLine=mkline(corner.x,corner.y,end.x,corner.y)
-		bottomLine=mkline(corner.x,end.y,end.x,end.y)
-		leftLine=mkline(corner.x,corner.y,corner.x,end.y)
-		rightLine=mkline(end.x,corner.y,end.x,end.y)
+		topLine=mkline(corner.x,corner.y,corner.x+1,corner.y) #corner.x+1 instead of end.x in case width 0
+		bottomLine=mkline(corner.x,end.y,corner.x+1,end.y) #vice versa
+		leftLine=mkline(corner.x,corner.y,corner.x,corner.y+1)
+		rightLine=mkline(end.x,corner.y,end.x,corner.y+1)
 		box=[topLine,bottomLine,leftLine,rightLine]
 
 		pointerLine=mkline(pos.x,pos.y,pos.x+delta.x,pos.y+delta.y)
@@ -274,6 +280,7 @@ dirChgInstr(
 	"r","Reverse","Go in the opposite direction",
 	lambda delta: -delta
 )
+defaultInstr=befunge2d[ord('r')]
 
 # other delta functions
 goAway=Instruction('?',"Go Away","Go north, south east or west randomly","Delta+")

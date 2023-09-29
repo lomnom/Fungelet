@@ -73,8 +73,6 @@ class Instruction:
 
 def nextPlaces(pos,delta,instrs,plane,zerotick=True):
 	item=plane[pos]
-	if item not in instrs:
-		return []
 	nextPlaces=list(instrs[item].transforms(delta,pos,plane))
 	changed=True
 	while changed:
@@ -88,6 +86,7 @@ def nextPlaces(pos,delta,instrs,plane,zerotick=True):
 				if nextInstr.zeroTick:
 					changed=True
 					nextPlaces=nextPlaces[:index]+list(nextInstr.transforms(nextDelta,nextPos,plane))+nextPlaces[index+1:]
+	# raise ValueError(nextPlaces)
 	return nextPlaces
 
 class FungeExitedException(BaseException):
@@ -225,9 +224,17 @@ class Space2d(Space):
 						self.maxY=min(keys)
 				if self.matrix:
 					if coord.x==self.maxX:
-						self.maxX=max([max(row) for row in self.matrix.values()])
+						maxes=[max(row) for row in self.matrix.values()]
+						if not maxes:
+							self.maxX=0
+						else:
+							self.maxX=max(maxes)
 					if coord.x==self.minX:
-						self.maxX=min([min(row) for row in self.matrix.values()])
+						mins=[min(row) for row in self.matrix.values()]
+						if not mins:
+							self.minX=0
+						else:
+							self.minX=min(mins)
 				else:
 					self.maxX=0
 
@@ -264,5 +271,9 @@ class Space2d(Space):
 		return '\n'.join([''.join(line) for line in result])
 
 	def limits(self): #(corner,size)
-		return (Vect2d(self.minX,self.minY),Vect2d(self.maxX-self.minX+1,self.maxY-self.minY+1))
+		if not self.matrix:
+			size=Vect2d(0,0)
+		else:
+			Vect2d(self.maxX-self.minX+1,self.maxY-self.minY+1)
+		return (Vect2d(self.minX,self.minY),size)
 

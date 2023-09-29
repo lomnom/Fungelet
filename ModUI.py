@@ -29,8 +29,7 @@ def modInit(modules,config,lock):
 	completed=Lock()
 	completed.acquire()
 
-	if not config["CtrlCSigint"]:
-		tc.NOCTRLC_CANVAS=True
+	tc.NOCTRLC_CANVAS=not config["CtrlCSigint"]
 
 	def main(cnv):
 		global root,stack,intr

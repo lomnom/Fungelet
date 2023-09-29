@@ -44,6 +44,8 @@ def newPointer():
 	return p
 
 def removePointer(p):
+	if focused is p:
+		unpossess()
 	pointers.remove(p)
 
 def reorderPointer(p,i):
@@ -196,12 +198,22 @@ class InspectorView(tui.GenElement):
 		else:
 			return tui.Text("Possess a cursor to view\n(In pointers screen)")
 
+killButton=ti.Button("kill possessed",'K')
+@killButton.onPress
+def kill(*_):
+	if focused:
+		statusText(f"Pointer killed.")
+		removePointer(focused)
+	else:
+		statusText(f"No pointer possessed!")
+
 def modInit(modules,config,lock):
-	global funge,cursor,pointers
+	global funge,cursor,pointers,statusText
 	funge=modules.load.funge
 	pointers=funge.pointers
 	cursor=modules.cursor
 	sidebar=modules.sidebar
+	statusText=modules.statustext.queueText
 
 	cursor.addCallback(cursorMoved)
 
@@ -213,5 +225,11 @@ def modInit(modules,config,lock):
 
 	# p=newPointer()
 	# p.stack=list(bytes("hello world!".encode("ascii")))+[1,2,4,8,16,8,4,2,1]
-	inspectorBar=sidebar.Sidebar("Possessed",InspectorView(),ti.Nothing())
+	inspectorBar=sidebar.Sidebar(
+		"Possessed",
+		tui.VStack(
+			InspectorView(),
+			killButton
+		)
+	,killButton)
 	sidebar.addSidebar(inspectorBar)

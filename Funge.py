@@ -263,6 +263,6 @@ class Space2d(Space):
 		#format 2d list into string
 		return '\n'.join([''.join(line) for line in result])
 
-	def limits(self):
+	def limits(self): #(corner,size)
 		return (Vect2d(self.minX,self.minY),Vect2d(self.maxX-self.minX+1,self.maxY-self.minY+1))
 

@@ -1,6 +1,13 @@
 from yaml import safe_load as load
 from Modules import *
 from CatchLock import CatchLock
+import os
+
+runpath = os.path.abspath(".")
+
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
 
 toLoad=load(open("Modules.yaml").read())
 configs=load(open("Config.yaml").read())
@@ -18,6 +25,7 @@ for module in objects:
 		config=configs[name]
 	else:
 		config={}
+	config["RunPath"]=str(runpath)
 	module.modInit(modules,config,lock)
 
 lock.unlock()

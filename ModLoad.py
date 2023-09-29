@@ -34,10 +34,24 @@ def loadBf(text,plane,sx,sy):
 			if char!=' ':
 				plane[fng.Vect2d(x+sx,row+sy)]=ord(char)
 
+def dumpBf(plane):
+	output=""
+	corner,size=plane.limits()
+	for y in range(corner.y,corner.y+size.y):
+		prevX=-1
+		row=plane.matrix.get(y)
+		if row:
+			for x in row:
+				output+=" "*((x-prevX)-1)
+				output+=chr(row[x])
+				prevX=x
+		output+="\n"
+	return output[:-1]
+
 @loadButton.onPress
 def load(*args): #todo: spawn relative to cursor
 	global funge
-	file=fileIn.text
+	file=runpath+"/"+fileIn.text
 
 	funge.plane.clear()
 	loadBf(open(file,'r').read(),funge.plane,0,0)
@@ -49,21 +63,22 @@ def load(*args): #todo: spawn relative to cursor
 @saveButton.onPress
 def save(*args):
 	global funge
-	tlc,size=funge.plane.limits()
-	file=fileIn.text
-
-	raise NotImplementedError
+	file=runpath+"/"+fileIn.text
 	
+	data=dumpBf(funge.plane)
+	open(file,'w').write(data)
+	modules.statustext.queueText(f"Saved file *{file}*")
 	for cb in onSave:
 		cb(file)
 
 def modInit(m,config,lock):
-	global funge,modules,sidebar
+	global funge,modules,sidebar,runpath
 	modules=m
-	here=pathlib.Path(".")
+	runpath=config["RunPath"]
+	here=pathlib.Path(config["RunPath"])
 	here=list(here.glob("*.b98"))
 	if len(here)==1:
-		fileIn.text=str(here[0])
+		fileIn.text=str(here[0]).split("/")[-1]
 
 	funge=fng.Funge([],fng.Space2d(),bng.befunge2d)
 

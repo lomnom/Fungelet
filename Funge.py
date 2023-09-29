@@ -274,6 +274,6 @@ class Space2d(Space):
 		if not self.matrix:
 			size=Vect2d(0,0)
 		else:
-			Vect2d(self.maxX-self.minX+1,self.maxY-self.minY+1)
+			size=Vect2d(self.maxX-self.minX+1,self.maxY-self.minY+1)
 		return (Vect2d(self.minX,self.minY),size)
 

@@ -21,18 +21,14 @@ class BfSpaceDisplay(tui.Element):
 			if row:
 				for x in range(pw):
 					character=row.get(cx+x)
-					if character:
+					if character is not None:
 						rendered=cnv.matrix[ry+y][rx+x]
 						if 32<=character<=126: #ascii normal character
 							rendered.char=chr(character)
 							if self.uniqueBg:
 								rendered.bcolor=str(character%256)
-						else:
-							rendered.char="?"
-							rendered.bcolor=str(character%256)
-							rendered.flags|={'i','f'}
 						for modifier in self.modifiers:
-							modifier(rendered,(x,y),(cy+y,cx+x),(cy,cx))
+							modifier(rendered,character,(x,y),(cy+y,cx+x),(cy,cx))
 
 		for markers in self.markers:
 			for marker in markers():

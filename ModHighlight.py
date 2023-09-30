@@ -4,10 +4,17 @@ from Befunge import befunge2d as bf
 
 #todo: ignore quotes?
 
-def highlightMod(rendered,*args):
+flashingQuestionMark=None
+def highlightMod(rendered,character,*args):
 	instr=bf.get(ord(rendered.char))
-	if instr is not None:
+	if character in bf:
 		rendered.fcolor=scheme[instr.theme]
+	elif not 32<=character<=126: #ascii normal character
+		if flashingQuestionMark:
+			rendered.char="?"
+			rendered.flags|={'f'}
+		rendered.bcolor=str(character%256)
+		rendered.flags|={'i'}
 
 enabled=None
 
@@ -37,10 +44,11 @@ def key(key):
 
 scheme=None
 def modInit(m,config,lock):
-	global scheme,modules,enabled
+	global scheme,modules,enabled,flashingQuestionMark
 	modules=m
 	enabled=config["DefaultEnable"]
 	scheme=config["Scheme"]
+	flashingQuestionMark=config["FlashingQuestionMark"]
 
 	m.ui.addIntr(toggle)
 

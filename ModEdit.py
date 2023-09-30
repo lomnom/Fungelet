@@ -24,7 +24,15 @@ def handler(key):
 		del plane[cursor.cursor]
 
 valueButton=ti.Button("put value","ctrl k")
-valueBox=ti.Textbox("ctrl l",text="123")
+valueBox=ti.Textbox("ctrl l",text="")
+
+statusText=None
+@valueButton.onPress
+def putDown(*_):
+	try:
+		plane[cursor.cursor]=int(valueBox.text)
+	except ValueError:
+		statusText(f"Invalid number '{valueBox.text}'!")
 
 stack=tui.VStack(
 	tui.Text("Type to put tile down!")
@@ -42,9 +50,10 @@ intr=ti.Group(
 )
 
 def modInit(m,config,lock):
-	global plane,cursor
+	global plane,cursor,statusText
 	plane=m.load.funge.plane
 	cursor=m.cursor
+	statusText=m.statustext.queueText
 
 	sidebar=m.sidebar.Sidebar("Editor",stack,intr)
 	m.sidebar.addSidebar(sidebar)

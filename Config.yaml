@@ -29,6 +29,7 @@ Highlight:
 
   Toggle: "ctrl h"
   DefaultEnable: true
+  FlashingQuestionMark: false
 
 Paths:
   Toggle: "ctrl p"

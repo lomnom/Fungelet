@@ -8,11 +8,13 @@ import pathlib
 fileIn=ti.Textbox("ctrl l")
 loadButton=ti.Button("load","L")
 saveButton=ti.Button("save","S")
+clearButton=ti.Button("clear","C")
 
 onLoad=[]
 onSave=[]
 
 interactives=ti.Group(
+	clearButton,
 	fileIn,
 	loadButton,
 	saveButton
@@ -23,7 +25,8 @@ visual=tui.VStack(
 		fileIn
 	),
 	loadButton,
-	saveButton
+	saveButton,
+	clearButton
 )
 
 funge=None
@@ -70,6 +73,18 @@ def save(*args):
 	modules.statustext.queueText(f"Saved file *{file}*")
 	for cb in onSave:
 		cb(file)
+
+tries=0
+@clearButton.onPress
+def clear(*args):
+	global tries
+	tries+=1
+	if tries==5:
+		funge.plane.matrix.clear()
+		modules.statustext.queueText("Cleared!")
+		tries=0
+	else:
+		modules.statustext.queueText(f"Press {5-tries} more times to clear")
 
 def modInit(m,config,lock):
 	global funge,modules,sidebar,runpath

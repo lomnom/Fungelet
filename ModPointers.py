@@ -125,7 +125,7 @@ class Stack(tui.GenElement): #todo: have a less crude thread safety solution (st
 		if stack:
 			for item in stack:
 				if 32<=item<=126: #ascii normal character
-					characterString+=chr(item)
+					characterString+="\\"+chr(item)
 				elif item==10:
 					characterString+="↩" #newline
 				else:
@@ -228,8 +228,20 @@ def modInit(modules,config,lock):
 	inspectorBar=sidebar.Sidebar(
 		"Possessed",
 		tui.VStack(
-			InspectorView(),
-			killButton
+			killButton,
+			tui.Text("Press w and s to scroll `(w,s)`"),
+			(scrollView:=tui.ScrollBox(
+				tui.VStack(
+					InspectorView(),
+					tui.Nothing(height=10)
+				),
+				style=[False,False,False,True],
+				axes=[True,False]
+			),100)
 		)
-	,killButton)
+		,ti.Group(
+			killButton,
+			ti.scrollerInput(scrollView.scroller,modules.ui.root.frames,inputs=["w","s",None,None])
+		)
+	)
 	sidebar.addSidebar(inspectorBar)

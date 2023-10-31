@@ -44,7 +44,7 @@ def dumpBf(plane):
 		prevX=-1
 		row=plane.matrix.get(y)
 		if row:
-			for x in row:
+			for x in sorted(row.keys()):
 				output+=" "*((x-prevX)-1)
 				output+=chr(row[x])
 				prevX=x
@@ -56,10 +56,16 @@ def load(*args): #todo: spawn relative to cursor
 	global funge
 	file=runpath+"/"+fileIn.text
 
-	funge.plane.clear()
-	loadBf(open(file,'r').read(),funge.plane,0,0)
+	try:
+		cont=open(file,'r').read()
+	except:
+		modules.statustext.queueText(f"File '*{file}*' inaccessible!")
+		return
 
-	modules.statustext.queueText(f"Loaded file *{file}*")
+	funge.plane.clear()
+	loadBf(cont,funge.plane,0,0)
+
+	modules.statustext.queueText(f"Loaded file '*{file}*'")
 	for cb in onLoad:
 		cb(file)
 

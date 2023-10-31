@@ -26,10 +26,11 @@ def stop():
 
 listener=None
 def modInit(m,config,lock):
-	global funge,listener,executing,renderer,quitLock
+	global funge,listener,executing,renderer,quitLock,message
 	funge=m.load.funge
 	renderer=lambda: m.ui.root.frames.schedule(0,tui.sched.framesLater)
 	quitLock=m.quitlock.quitLock
+	message=m.statustext.queueText
 
 	rateInput=ti.Textbox("ctrl l",text="15")
 
@@ -50,9 +51,12 @@ def modInit(m,config,lock):
 		global executing
 		if key==config["StepKey"]:
 			funge.step()
+			message("Stepped!")
 		elif key==config["RunKey"]:
 			if not executing:
 				run(1/float(rateInput.text))
+				message(f"Execution started at {round(float(rateInput.text))} ticks per second")
 			else:
 				stop()
+				message("Execution stopped!")
 	m.ui.addIntr(listener)

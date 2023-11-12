@@ -73,7 +73,9 @@ def load(*args): #todo: spawn relative to cursor
 def save(*args):
 	global funge
 	file=runpath+"/"+fileIn.text
-	
+	if len(funge.plane.matrix)==0:
+		modules.statustext.queueText(f"Plane empty! Save stopped for safety!")
+		return
 	data=dumpBf(funge.plane)
 	open(file,'w').write(data)
 	modules.statustext.queueText(f"Saved file *{file}*")

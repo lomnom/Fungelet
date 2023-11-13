@@ -51,7 +51,7 @@ def inNum():
 	inbox.text=inbox.text[end:]
 	return int(result)
 
-bf.INNUM=inNum #todo: not just return 0 if fail, but reflect
+bf.INNUM=inNum 
 
 def inChar():
 	if len(inbox.text)>0:

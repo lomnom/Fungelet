@@ -59,4 +59,5 @@ def modInit(m,config,lock):
 			else:
 				stop()
 				message("Execution stopped!")
+				m.ui.root.frames.schedule(3,tui.sched.framesLater)
 	m.ui.addIntr(listener)

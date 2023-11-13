@@ -536,14 +536,39 @@ def run(instr,funge,pointer):
 	pointer.pos+=pointer.delta
 befunge2dInstr(get)
 
-# stdin & stdout TODO: act like r if fail
+# stdout TODO: act like r if fail???
 stdout=print
 stdin=input
 
+buffer=""
+def getInput():
+	global buffer
+	if buffer:
+		return
+	else:
+		buffer+="\n"+stdin()
+
 OUTNUM=lambda n: stdout(n) 
-INNUM=lambda: int(stdin())
+def INNUM():
+	getInput()
+	global buffer
+	word=buffer.split("\n")[0]
+	if word.isnumerical():
+		buffer="\n".join(buffer.split("\n")[1:])
+		return int(word)
+	else:
+		return None
+
 OUTCHAR=lambda c: stdout(chr(c))
-INCHAR=lambda: ord(stdin()[0])
+def INCHAR():
+	getInput()
+	global buffer
+	if buffer:
+		res=buffer[0]
+		buffer=buffer[1:]
+		return ord(res)
+	else:
+		return None
 
 outNum=Instruction('.',"Output Decimal","Pops and prints the number.","I/O")
 @outNum.runner
@@ -564,16 +589,24 @@ befunge2dInstr(outChar)
 inNum=Instruction('&',"Input Decimal","Pushes number from user input.","I/O")
 @inNum.runner
 def run(instr,funge,pointer):
-	pointer.stackPush(INNUM())
+	res=INNUM()
+	if res!=None:
+		pointer.stackPush(res)
+	else:
+		pointer.delta=-pointer.delta
 	pointer.pos+=pointer.delta
 befunge2dInstr(inNum)
 
-inNum=Instruction('~',"Input Character","Pushes character from user input.","I/O")
-@inNum.runner
+inChar=Instruction('~',"Input Character","Pushes character from user input.","I/O")
+@inChar.runner
 def run(instr,funge,pointer):
-	pointer.stackPush(INCHAR())
+	res=INCHAR()
+	if res!=None:
+		pointer.stackPush(res)
+	else:
+		pointer.delta=-pointer.delta
 	pointer.pos+=pointer.delta
-befunge2dInstr(inNum)
+befunge2dInstr(inChar)
 
 # File I/O (TODO)
 

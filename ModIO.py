@@ -40,12 +40,12 @@ bf.stdout=print
 
 def inNum():
 	result=""
-	if not inbox.text[0].isnumerical():
-		return 0
-	end=-1
-	for index,char in enumerate(inbox.text):
+	if (not inbox.text) or (not inbox.text[0].isnumeric()):
+		return None
+	end=0
+	for index,char in enumerate(inbox.text+'L'):
 		if not char.isnumeric():
-			end=index+1
+			end=index
 			break
 	result=inbox.text[:end]
 	inbox.text=inbox.text[end:]
@@ -54,9 +54,12 @@ def inNum():
 bf.INNUM=inNum #todo: not just return 0 if fail, but reflect
 
 def inChar():
-	result=inbox.text[0]
-	inbox.text=inbox.text[1:]
-	return result
+	if len(inbox.text)>0:
+		result=inbox.text[0]
+		inbox.text=inbox.text[1:]
+		return ord(result)
+	else:
+		return None
 bf.INCHAR=inChar
 
 def modInit(m,config,lock):

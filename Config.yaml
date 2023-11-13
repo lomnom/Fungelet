@@ -4,6 +4,7 @@ UI:
 
 Quit:
   quitKey: "ctrl w"
+  welcomeText: "Press *ctrl left* to edit!"
 
 Sidebar:
   next: "ctrl right"
@@ -29,7 +30,7 @@ Highlight:
 
   Toggle: "ctrl h"
   DefaultEnable: true
-  FlashingQuestionMark: false
+  FlashingQuestionMark: false # non-ascii characters will also have a question mark
 
 Paths:
   Toggle: "ctrl p"

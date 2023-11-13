@@ -17,6 +17,7 @@ objects=[__import__(prefix+name) for name in toLoad['modules']]
 modules=Modules(prefix=prefix)
 lock=CatchLock() #catchlock unlocked when all modules are loaded
 lock.lock()
+calls=[]
 
 for module in objects:
 	modules.add(module)
@@ -26,6 +27,11 @@ for module in objects:
 	else:
 		config={}
 	config["RunPath"]=str(runpath)
-	module.modInit(modules,config,lock)
+	call=module.modInit(modules,config,lock)
+	if call:
+		calls.append(call)
 
 lock.unlock()
+
+for call in calls:
+	call(modules)

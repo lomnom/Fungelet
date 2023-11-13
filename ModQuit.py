@@ -2,11 +2,11 @@ import TermIntr as ti
 import TermUI as tui
 
 quitCallbacks=[]
-welcomeText=" Press *ctrl right* to edit!"
 
 def modInit(modules,config,lock):
 	listener=ti.Listener()
 	quitKey=config["quitKey"]
+	welcomeText=config['welcomeText']
 	@listener.handle
 	def handle(key):
 		if key==quitKey:
@@ -17,4 +17,4 @@ def modInit(modules,config,lock):
 			modules.quitlock.quitLock.unlock()
 
 	modules.ui.addIntr(listener)
-	modules.statustext.queueText("Press *ctrl w* to quit!"+welcomeText)
+	modules.statustext.queueText("Press *ctrl w* to quit! "+welcomeText)

@@ -2,6 +2,7 @@ import TermUI as tui
 import TermIntr as ti
 from threading import Thread
 from time import sleep
+import Befunge as bf
 
 executing=False
 funge=None
@@ -10,7 +11,11 @@ quitLock=None
 def runner(delay):
 	while executing and quitLock.locked(): #todo: implement using stopwatch
 		sleep(delay)
-		funge.step()
+		try:
+			funge.step()
+		except bf.FungeExitedException:
+			message("Execution ended!")
+			break
 		renderer()
 
 def run(delay):

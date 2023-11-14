@@ -4,12 +4,16 @@ from Befunge import befunge2d as bf
 
 #x and y are canvas coordinates of rendered top left
 class BfSpaceDisplay(tui.Element):
-	def __init__(self,space,where=lambda rx,ry,ph,pw: (0,0),markers=[],modifiers=[],uniqueBg=False): 
+	def __init__(
+		self,space,where=lambda rx,ry,ph,pw: (0,0), uniqueBg=False,
+		markers=[],modifiers=[],changers=[]
+	): 
 		self.space=space
 		self.where=where
 		self.markers=markers
 		self.modifiers=modifiers
 		self.uniqueBg=uniqueBg
+		self.changers=changers
 
 	def size(self):
 		return (0,0)
@@ -36,6 +40,9 @@ class BfSpaceDisplay(tui.Element):
 				if (cx+pw)>mx>=(cx) and (cy+ph)>my>=(cy):
 					rendered=cnv.matrix[ry+(my-cy)][rx+(mx-cx)]
 					func(rendered)
+
+		for changer in self.changers:
+			changer(rx,ry,ph,pw,cx,cy,cnv)
 
 def originMarker():
 	def originMod(char):

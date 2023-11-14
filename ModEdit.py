@@ -15,7 +15,7 @@ def handler(key):
 			return
 		else:
 			plane[cursor.cursor]=ord(key)
-			if moveButton.activated and not cursor.step():
+			if moveButton.activated and not cursor.step(certain=True):
 				cursor.cursor+=cursor.cursorDelta
 	elif key=="backspace":
 		if moveButton.activated:

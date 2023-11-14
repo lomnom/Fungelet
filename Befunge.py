@@ -116,6 +116,7 @@ def rangeResults(x,y,h,w,results):
 			return True
 	return False
 
+#offset moves left
 def roundpp(val,chunk,offset,direction): #direction=1 if ceil else -1 for floor
 	chunk=abs(chunk)
 	val=val-offset+(direction*0.5*chunk)

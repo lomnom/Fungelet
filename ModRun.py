@@ -3,20 +3,38 @@ import TermIntr as ti
 from threading import Thread
 from time import sleep
 import Befunge as bf
+import Terminal as trm
 
 executing=False
 funge=None
 quitLock=None
 
-def runner(delay):
-	while executing and quitLock.locked(): #todo: implement using stopwatch
-		sleep(delay)
-		try:
+ceil=lambda n: round(n+0.5)
+def runner(delay,renderSpace=0.05): #time between render calls
+	global executing
+	stopwatch=trm.Stopwatch()
+	tick=0
+	frameDelay=ceil(renderSpace/delay)
+	stopwatch.start()
+	try:
+		while executing and quitLock.locked(): #todo: implement using stopwatch
 			funge.step()
-		except bf.FungeExitedException:
-			message("Execution ended!")
-			break
-		renderer()
+			tick+=1
+			if (tick%frameDelay)==0:
+				renderer()
+
+			wait=(tick*delay)-stopwatch.time()
+			if wait>=0:
+				sleep(wait)
+			else:
+				if (tick%(frameDelay*5))==0:
+					time=round(-wait*10000)/10
+					if time>0:
+						message(f"Execution behind by {time}ms")
+	except bf.FungeExitedException:
+		message(f"Execution ended after {tick} ticks")
+		executing=False
+	stopwatch.stop()
 
 def run(delay):
 	global executing
@@ -31,8 +49,9 @@ def stop():
 
 listener=None
 def modInit(m,config,lock):
-	global funge,listener,executing,renderer,quitLock,message
+	global funge,listener,executing,renderer,quitLock,message,frames
 	funge=m.load.funge
+	frames=m.ui.root.frames
 	renderer=lambda: m.ui.root.frames.schedule(0,tui.sched.framesLater)
 	quitLock=m.quitlock.quitLock
 	message=m.statustext.queueText

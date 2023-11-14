@@ -23,14 +23,16 @@ def goto(c,d):
 	for callback in callbacks:
 		callback(c,d)
 
-def step():
-	try:
-		d,c=fng.nextPlaces(cursor,cursorDelta,instrs,plane,zerotick=(plane[cursor]==plane.defaultValue))[0]
-		moved=c!=cursor
-		goto(c,d)
-		return moved
-	except IndexError:
+def step(certain=False):
+	places=fng.nextPlaces(cursor,cursorDelta,instrs,plane,zerotick=(plane[cursor]==plane.defaultValue))
+	if len(places)==0:
 		return False
+	if len(places)>1 and certain:
+		return True
+	d,c=places[0]
+	moved=c!=cursor
+	goto(c,d)
+	return moved
 
 movement=ti.Listener()
 @movement.handle

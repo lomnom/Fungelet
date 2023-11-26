@@ -3,8 +3,8 @@ import TermIntr as ti
 import Funge as fng
 import Befunge as bf
 
-inbox=ti.Textbox("ctrl l",formatter=ti.asciify)
-outbox=tui.Text("",raw=True)
+inbox=ti.Textbox("ctrl l",formatters=[ti.asciify])
+outbox=tui.Text("\033\033")
 
 clear=ti.Listener()
 @clear.handle
@@ -12,7 +12,8 @@ def handler(key):
 	if key=="C":
 		inbox.text=""
 	elif key=="c":
-		outbox.text=''
+		outbox.text='\033\033'
+		raise ValueError(stuff)
 
 display=tui.ScrollBox(
 	tui.VStack(
@@ -31,10 +32,12 @@ display=tui.ScrollBox(
 )
 
 def print(msg):
+	global stuff
 	if type(msg) is str:
-		outbox.text+=ti.asciify(msg)
+		outbox.text=outbox.text[:-1]+ti.asciify(msg)+"\033"
 	else:
-		outbox.text+=ti.asciify(repr(msg)+"\n")
+		outbox.text=outbox.text[:-1]+ti.asciify(repr(msg))+"\n"+"\033"
+		pass
 
 bf.stdout=print
 

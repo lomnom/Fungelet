@@ -7,8 +7,8 @@ Quit:
   welcomeText: "Press *ctrl left* to edit!"
 
 Sidebar:
-  next: "ctrl right"
-  prev: "ctrl left"
+  next: "shift right"
+  prev: "shift left"
 
 Highlight:
   Scheme:

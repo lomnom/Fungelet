@@ -4,7 +4,7 @@ import Funge as fng
 import Befunge as bf
 
 inbox=ti.Textbox("ctrl l",formatter=ti.asciify)
-outbox=ti.Textbox("ctrl u",formatter=ti.asciify)
+outbox=tui.Text("",raw=True)
 
 clear=ti.Listener()
 @clear.handle
@@ -32,9 +32,9 @@ display=tui.ScrollBox(
 
 def print(msg):
 	if type(msg) is str:
-		outbox.text+=msg
+		outbox.text+=ti.asciify(msg)
 	else:
-		outbox.text+=repr(msg)+"\n"
+		outbox.text+=ti.asciify(repr(msg)+"\n")
 
 bf.stdout=print
 
@@ -67,7 +67,6 @@ def modInit(m,config,lock):
 
 	intr=ti.Group(
 		inbox,
-		outbox,
 		clear,
 		ti.scrollerInput(display.scroller,m.ui.root.frames,inputs=["w","s",None,None])
 	)

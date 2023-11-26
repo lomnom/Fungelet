@@ -9,9 +9,10 @@ rm -rf Terminal
 python3 Run.py
 ```
 ## Usage
-(pretty self-explanatory but will write when completed)
+(pretty self-explanatory but will write when completed)  
+befunge examples [here](http://www.nsl.com/k/befunge93/index.html)
 
-## Documentation 
+## Documentation left
 (will also write when stable release created)
 
 ## Screenshot

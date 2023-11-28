@@ -26,7 +26,7 @@ Highlight:
     Stack: '159'
     Strings: '13'
     Termination: '1'
-    Value: '7'
+    Value: '11'
 
   Toggle: "ctrl h"
   DefaultEnable: true

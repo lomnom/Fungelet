@@ -13,7 +13,6 @@ def handler(key):
 		inbox.text=""
 	elif key=="c":
 		outbox.text='\033\033'
-		raise ValueError(stuff)
 
 display=tui.ScrollBox(
 	tui.VStack(

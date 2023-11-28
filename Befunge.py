@@ -47,8 +47,7 @@ def run(instr,funge,pointer):
 
 @quotes.transformer
 def transforms(instr,delta,position,space): #TODO: support transforms with special modes
-	return
-	yield
+	yield (delta,position+delta)
 befunge2dInstr(quotes)
 
 debug=Instruction('D',"Debug","Print 'Debug' to stdout","Debug")

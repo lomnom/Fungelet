@@ -18,8 +18,8 @@ def runner(delay,renderSpace=0.05): #time between render calls
 	stopwatch.start()
 	try:
 		while executing and quitLock.locked(): #todo: implement using stopwatch
-			funge.step()
 			tick+=1
+			funge.step()
 			if (tick%frameDelay)==0:
 				renderer()
 
@@ -78,8 +78,8 @@ def modInit(m,config,lock):
 			message("Stepped!")
 		elif key==config["RunKey"]:
 			if not executing:
-				run(1/float(rateInput.text))
 				message(f"Execution started at {round(float(rateInput.text))} ticks per second")
+				run(1/float(rateInput.text))
 			else:
 				stop()
 				message("Execution stopped!")

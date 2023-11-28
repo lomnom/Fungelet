@@ -46,7 +46,8 @@ def newPointer():
 def removePointer(p):
 	if focused is p:
 		unpossess()
-	pointers.remove(p)
+	if p in pointers:
+		pointers.remove(p)
 
 def reorderPointer(p,i):
 	pointers.remove(p)

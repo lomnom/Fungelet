@@ -26,7 +26,7 @@ def goto(c,d):
 def step(certain=False):
 	places=fng.nextPlaces(cursor,cursorDelta,instrs,plane,zerotick=(plane[cursor]==plane.defaultValue))
 	if len(places)==0:
-		return False
+		return True
 	if len(places)>1 and certain:
 		return True
 	d,c=places[0]

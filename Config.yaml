@@ -15,7 +15,6 @@ Highlight:
     Concurrency: '10'
     Debug: '12'
     Delta: '2'
-    Delta+: '3'
     Funge Space: '11'
     I/O: '214'
     Logic: '4'
@@ -26,7 +25,7 @@ Highlight:
     Stack: '159'
     Strings: '13'
     Termination: '1'
-    Value: '11'
+    Value: '7'
 
   Toggle: "ctrl h"
   DefaultEnable: true

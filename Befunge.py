@@ -283,7 +283,7 @@ dirChgInstr(
 defaultInstr=befunge2d[ord('r')]
 
 # other delta functions
-goAway=Instruction('?',"Go Away","Go north, south east or west randomly","Delta+")
+goAway=Instruction('?',"Go Away","Go north, south east or west randomly","Delta")
 goAway.directions=[Vect2d.north,Vect2d.south,Vect2d.east,Vect2d.west]
 
 @goAway.runner
@@ -297,7 +297,7 @@ def transforms(instr,delta,position,space):
 		yield (direction,position+direction)
 befunge2dInstr(goAway)
 
-setDelta=Instruction('x',"Set Delta","Pops dY THEN dX off the stack. Sets delta to (dX,dY)","Delta+")
+setDelta=Instruction('x',"Set Delta","Pops dY THEN dX off the stack. Sets delta to (dX,dY)","Delta")
 
 @setDelta.runner
 def run(instr,funge,pointer):

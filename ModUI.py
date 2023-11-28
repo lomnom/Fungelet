@@ -23,7 +23,6 @@ def addIntr(added):
 def removeIntr(added):
 	intr.orphanIChild(added)
 
-
 def modInit(modules,config,lock):
 	global thread,explosionKey
 	completed=Lock()

@@ -4,7 +4,7 @@ import Funge as fng
 import Befunge as bf
 
 inbox=ti.Textbox("ctrl l",formatters=[ti.asciify])
-outbox=tui.Text("\033\033",inc=(0,1),newline=(1,0))
+outbox=tui.Text("\033\033")
 
 clear=ti.Listener()
 @clear.handle

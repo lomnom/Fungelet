@@ -37,11 +37,11 @@ def step(certain=False):
 movement=ti.Listener()
 @movement.handle
 def key(key):
-	root.frames.schedule(
-		1,tui.sched.framesLater
-	)
 	if key==cfg["Step"]:
 		step()
+		root.frames.schedule(
+			1,tui.sched.framesLater
+		)
 		return
 	elif key==cfg["Up"]:
 		d=fng.Vect2d(0,-1)
@@ -53,6 +53,9 @@ def key(key):
 		d=fng.Vect2d(1,0)
 	else:
 		return
+	root.frames.schedule(
+		1,tui.sched.framesLater
+	)
 	c=d+cursor
 	goto(c,d)
 

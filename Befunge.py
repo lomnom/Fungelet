@@ -618,10 +618,10 @@ befunge2dInstr(inChar)
 split=Instruction('t',"Split","Duplicates instruction pointer with an opposite delta.","Concurrency")
 @split.runner
 def run(instr,funge,pointer):
-	newPointer=BfPointer(
-		funge,pointer.position,-pointer.delta,pointer.stack,pointer.stackStack,pointer.offset
+	newPointer=BfPointer( #stackstack issues
+		funge,pointer.pos.copy(),-pointer.delta,pointer.stack[:],pointer.stackStack[:],pointer.offset.copy()
 	)
-	funge.pointers=[newPointer]+funge.pointers
+	funge.pointers.insert(0,newPointer)
 	pointer.pos+=pointer.delta
 	newPointer.pos+=newPointer.delta
 befunge2dInstr(split)

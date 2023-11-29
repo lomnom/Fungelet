@@ -74,7 +74,10 @@ def modInit(m,config,lock):
 	def handler(key):
 		global executing
 		if key==config["StepKey"]:
-			funge.step()
+			try:
+				funge.step()
+			except bf.FungeExitedException:
+				pass
 			message("Stepped!")
 		elif key==config["RunKey"]:
 			if not executing:

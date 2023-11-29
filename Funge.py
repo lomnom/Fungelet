@@ -132,7 +132,7 @@ class Funge:
 		self.instrs[instr].run(self,pointer)
 
 	def step(self):
-		for pointer in self.pointers:
+		for pointer in self.pointers[:]:
 			pointer.step()
 
 # (Cells are represented by integers)

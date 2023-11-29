@@ -93,7 +93,7 @@ def modInit(m,config,lock):
 				tooltip.x-=1
 			elif key==config["_"]["Cursor"]["Right"]:
 				tooltip.x+=1
-			if 0>tooltip.x or tooltip.y>=len(tooltip.string) or 0>tooltip.y or tooltip.y>=len(tooltip.string[tooltip.x]):
+			if 0>tooltip.x or tooltip.x>=len(tooltip.string) or 0>tooltip.y or tooltip.y>=len(tooltip.string[tooltip.x]):
 				tooltip.x=oldx
 				tooltip.y=oldy
 			instr=bf.befunge2d[ord(tooltip.string[tooltip.x][tooltip.y])]

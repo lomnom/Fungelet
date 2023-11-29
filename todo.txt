@@ -1,9 +1,12 @@
 todo: SIMPLE selection/copypaste & flip (only non-empty tiles)
+todo: snapshots
+
 todo: paths 
 todo: autosave
 todo: docs
 
 todo: blocking input
 todo: freezing seperate pointers
-todo: snapshots
 todo: prevent loading instead of saving
+
+todo: stackstack

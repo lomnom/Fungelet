@@ -4,11 +4,15 @@ UI:
 
 Quit:
   quitKey: "ctrl w"
-  welcomeText: "Press *ctrl left* to edit!"
+  welcomeText: "Press *shift left* to edit and *ctrl t* for docs!"
 
 Sidebar:
   next: "shift right"
   prev: "shift left"
+
+Tooltip:
+  TipKey: "ctrl t"
+  Place: "\n"
 
 Highlight:
   Scheme:
@@ -22,7 +26,7 @@ Highlight:
     Nothing: '8'
     Position: '5'
     Repetition: '15'
-    Stack: '159'
+    Stack: '202'
     Strings: '13'
     Termination: '1'
     Value: '7'

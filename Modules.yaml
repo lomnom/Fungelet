@@ -17,5 +17,5 @@ modules:
 - Pointers
 - Run
 - Edit
-- IO
 - Tooltip
+- IO

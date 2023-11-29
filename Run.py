@@ -26,6 +26,7 @@ for module in objects:
 		config=configs[name]
 	else:
 		config={}
+	config["_"]=configs
 	config["RunPath"]=str(runpath)
 	call=module.modInit(modules,config,lock)
 	if call:

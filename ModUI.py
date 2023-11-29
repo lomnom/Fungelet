@@ -9,8 +9,8 @@ root=None
 stack=tui.ZStack()
 intr=ti.Group()
 
-def addElem(element):
-	stack.insertChild(element,0)
+def addElem(element,index=0):
+	stack.insertChild(element,index)
 	root.frames.schedule(0,tui.sched.framesLater)
 
 def removeElem(element):

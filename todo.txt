@@ -3,9 +3,7 @@ todo: paths
 todo: autosave
 todo: docs
 
-todo: cheatsheet (tooltips)
 todo: blocking input
 todo: freezing seperate pointers
 todo: snapshots
 todo: prevent loading instead of saving
-todo: origin button

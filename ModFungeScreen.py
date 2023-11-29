@@ -32,7 +32,7 @@ class BfSpaceDisplay(tui.Element):
 							if self.uniqueBg:
 								rendered.bcolor=str(character%256)
 						for modifier in self.modifiers:
-							modifier(rendered,character,(x,y),(cy+y,cx+x),(cy,cx))
+							modifier(rendered,character,(x,y),(ry+y,rx+x),(cy,cx))
 
 		for markers in self.markers:
 			for marker in markers():

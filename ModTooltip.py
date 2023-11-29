@@ -85,9 +85,6 @@ def modInit(m,config,lock):
 			if key==config["Place"]:
 				m.load.funge.plane[m.cursor.cursor]=ord(tooltip.string[tooltip.x][tooltip.y])
 				m.statustext.queueText("Placed instruction.")
-				m.ui.removeElem(element) #remove
-				m.ui.addIntr(m.cursor.movement)
-				shown=False
 			elif key==config["_"]["Cursor"]["Up"]:
 				tooltip.y-=1
 			elif key==config["_"]["Cursor"]["Down"]:
@@ -99,10 +96,10 @@ def modInit(m,config,lock):
 			if 0>tooltip.x or tooltip.y>=len(tooltip.string) or 0>tooltip.y or tooltip.y>=len(tooltip.string[tooltip.x]):
 				tooltip.x=oldx
 				tooltip.y=oldy
-		instr=bf.befunge2d[ord(tooltip.string[tooltip.x][tooltip.y])]
-		m.statustext.queueText(f"*[{instr.theme}]* - \033{instr.description} \033")
-		m.ui.root.frames.schedule(
-			1,tui.sched.framesLater
-		)
+			instr=bf.befunge2d[ord(tooltip.string[tooltip.x][tooltip.y])]
+			m.statustext.queueText(f"*[{instr.theme}]* - \033{instr.description} \033")
+			m.ui.root.frames.schedule(
+				1,tui.sched.framesLater
+			)
 
 	m.ui.addIntr(listener)

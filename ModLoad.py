@@ -51,9 +51,15 @@ def dumpBf(plane):
 		output+="\n"
 	return output[:-1]
 
+loadTries=0
 @loadButton.onPress
 def load(*args): #todo: spawn relative to cursor
-	global funge
+	global funge,loadTries
+	loadTries+=1
+	if len(funge.plane.matrix)>0 and loadTries!=3:
+		modules.statustext.queueText(f"Plane not empty! Press {3-loadTries} more times to confirm load!")
+		return
+	loadTries=0
 	file=runpath+"/"+fileIn.text
 
 	try:
@@ -82,17 +88,17 @@ def save(*args):
 	for cb in onSave:
 		cb(file)
 
-tries=0
+clearTries=0
 @clearButton.onPress
 def clear(*args):
-	global tries
-	tries+=1
-	if tries==5:
+	global clearTries
+	clearTries+=1
+	if clearTries==5:
 		funge.plane.matrix.clear()
 		modules.statustext.queueText("Cleared!")
-		tries=0
+		clearTries=0
 	else:
-		modules.statustext.queueText(f"Press {5-tries} more times to clear")
+		modules.statustext.queueText(f"Press {5-clearTries} more times to clear")
 
 def modInit(m,config,lock):
 	global funge,modules,sidebar,runpath

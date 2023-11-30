@@ -7,6 +7,6 @@ todo: docs
 
 todo: blocking input
 todo: freezing seperate pointers
-todo: prevent loading instead of saving
+todo: dont close with unsaved info
 
 todo: stackstack

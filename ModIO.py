@@ -6,21 +6,23 @@ import Befunge as bf
 inbox=ti.Textbox("ctrl l",formatters=[ti.asciify])
 outbox=tui.Text("\033\033")
 
-clear=ti.Listener()
-@clear.handle
-def handler(key):
-	if key=="C":
-		inbox.text=""
-	elif key=="c":
-		outbox.text='\033\033'
+clearInput=ti.Button("clear","C")
+@clearInput.onToggle
+def handler(_):
+	inbox.text=""
+
+clearOutput=ti.Button('clear',"c")
+@clearOutput.onToggle
+def handler(_):
+	outbox.text='\033\033'
 
 display=tui.ScrollBox(
 	tui.VStack(
-		tui.Text("Press C to clear `(C)`"),
+		clearInput,
 		tui.Text("*_Input buffer_*"),
 		inbox,
 		tui.Seperator("horizontal",tui.lines.dotted.h,style="`"),
-		tui.Text("Press c to clear `(c)`"),
+		clearOutput,
 		tui.Text("*_Output buffer_*"),
 		outbox,
 		tui.Text("Press w and s to scroll `(w,s)` ")
@@ -69,7 +71,8 @@ def modInit(m,config,lock):
 
 	intr=ti.Group(
 		inbox,
-		clear,
+		clearOutput,
+		clearInput,
 		ti.scrollerInput(display.scroller,m.ui.root.frames,inputs=["w","s",None,None])
 	)
 

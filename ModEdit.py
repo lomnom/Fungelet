@@ -13,9 +13,11 @@ def handler(key):
 	if len(key)==1:
 		if key=="\n":
 			return
-		elif moveButton.activated:
+		else:
 			plane[cursor.cursor]=ord(key)
-			if key==" " or ord(key) not in bfg.befunge2d or (moveButton.activated and not cursor.step(certain=True)):
+			if moveButton.activated and (
+				key==" " or ord(key) not in bfg.befunge2d or (moveButton.activated and not cursor.step(certain=True))
+			):
 				cursor.cursor+=cursor.cursorDelta
 	elif key=="backspace":
 		if moveButton.activated:

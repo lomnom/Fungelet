@@ -84,21 +84,27 @@ def pointersAt(pos):
 spawnButton=ti.Button("spawn a pointer","S")
 @spawnButton.onPress
 def spawn(*_):
-	possess(newPointer())
+	new=newPointer()
+	possess(new)
+	statusText(f"Spawned pointer #{pointers.index(new)}")
 
 possessCounter=0 #so every possess gives a diff pointer if multiple on same tile
 possessButton=ti.Button("un/possess a pointer\nbelow the cursor","P")
 @possessButton.onPress
 def cursorPossess(*_):
-	global focused
+	global focused,possessCounter
+	if focused:
+		unpossess()
+		statusText("Unpossessed pointer")
+		return
 	found=pointersAt(cursor.cursor)
-	if focused and focused.pos==cursor.cursor:
-		found.remove(focused)
+	possessCounter+=1
 	if found:
 		focused=found[possessCounter%len(found)]
+		statusText(f"Possessed pointer #{pointers.index(focused)}")
 		possess(focused)
 	else:
-		unpossess()
+		statusText("No pointer to possess")
 
 homeIntr=ti.Group(
 	spawnButton,

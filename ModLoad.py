@@ -38,10 +38,13 @@ def loadBf(text,plane,sx,sy):
 				plane[fng.Vect2d(x+sx,row+sy)]=ord(char)
 
 def dumpBf(plane):
+	if not plane.matrix:
+		return ""
 	output=""
 	corner,size=plane.limits()
+	leftmost=min([min(row) for row in plane.matrix.values()])
 	for y in range(corner.y,corner.y+size.y):
-		prevX=-1
+		prevX=leftmost-1
 		row=plane.matrix.get(y)
 		if row:
 			for x in sorted(row.keys()):

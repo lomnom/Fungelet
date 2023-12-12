@@ -77,7 +77,9 @@ def modInit(m,config,lock):
 			else:
 				m.ui.addElem(element,-1)
 				m.ui.removeIntr(m.cursor.movement)
-				m.statustext.queueText("*ctrl l* to exit or *enter* to choose.")
+				m.statustext.queueText(
+					f"Press *{config['TipKey']}* to exit or *{config['Place'] if ord(config['Place'])!=10 else 'enter'}* to choose."
+				)
 				shown=True
 		elif shown:
 			oldx=tooltip.x

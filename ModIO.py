@@ -44,18 +44,35 @@ bf.stdout=print
 
 def inNum():
 	result=""
-	if (not inbox.text) or (not inbox.text[0].isnumeric()):
-		return None
-	end=0
-	for index,char in enumerate(inbox.text+'L'):
-		if not char.isnumeric():
-			end=index
+	start=None
+	for index,char in enumerate(inbox.text):
+		if char.isnumeric():
+			start=index
 			break
-	result=inbox.text[:end]
-	inbox.text=inbox.text[end:]
+	if start==None:
+		return None
+	end=start+1
+	for index,char in enumerate(inbox.text[start:]+'L'):
+		if not char.isnumeric():
+			end=index+start
+			break
+	result=inbox.text[start:end]
+	inbox.text=inbox.text[:start]+inbox.text[end:]
 	return int(result)
 
-bf.INNUM=inNum 
+blockingInput=None
+
+def bfInNum():
+	result=inNum()
+	if result==None:
+		if blockingInput:
+			raise bf.FungeExitedException(input)
+		else:
+			return None
+	else:
+		return result
+
+bf.INNUM=bfInNum 
 
 def inChar():
 	if len(inbox.text)>0:
@@ -64,10 +81,28 @@ def inChar():
 		return ord(result)
 	else:
 		return None
-bf.INCHAR=inChar
+
+def bfInChar():
+	result=inChar()
+	if result==None:
+		if blockingInput:
+			raise bf.FungeExitedException(input)
+		else:
+			return None
+	else:
+		return result
+
+bf.INCHAR=bfInChar
 
 def modInit(m,config,lock):
-	global modules
+	global modules,bl
+
+	blockingInput=bool(config["BlockingInput"])
+	def inputNotify(e,tick):
+		if e.args[0]==input:
+			m.statustext.queueText("Input required! Restart execution once entered!")
+
+	m.run.endCalls.append(inputNotify)
 
 	intr=ti.Group(
 		inbox,

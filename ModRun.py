@@ -9,6 +9,8 @@ executing=False
 funge=None
 quitLock=None
 
+endCalls=[lambda e,tick: message(f"Execution ended after {tick} ticks with {e.args}")]
+
 ceil=lambda n: round(n+0.5)
 def runner(delay,renderSpace=0.05): #time between render calls
 	global executing
@@ -19,7 +21,11 @@ def runner(delay,renderSpace=0.05): #time between render calls
 	try:
 		while executing and quitLock.locked(): #todo: implement using stopwatch
 			tick+=1
-			funge.step()
+			for pointer in funge.pointers[:]:
+				if not executing:
+					break
+				pointer.step()
+
 			if (tick%frameDelay)==0:
 				renderer()
 
@@ -31,8 +37,9 @@ def runner(delay,renderSpace=0.05): #time between render calls
 					time=round(-wait*10000)/10
 					if time>0:
 						message(f"Execution behind by {time}ms")
-	except bf.FungeExitedException:
-		message(f"Execution ended after {tick} ticks")
+	except bf.FungeExitedException as e:
+		for call in endCalls:
+			call(e,tick)
 		executing=False
 	stopwatch.stop()
 
@@ -76,8 +83,9 @@ def modInit(m,config,lock):
 		if key==config["StepKey"]:
 			try:
 				funge.step()
-			except bf.FungeExitedException:
-				pass
+			except bf.FungeExitedException as e:
+				for call in endCalls:
+					call(e,-1)
 			message("Stepped!")
 		elif key==config["RunKey"]:
 			if not executing:

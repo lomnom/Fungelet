@@ -51,3 +51,6 @@ FungeScreen:
 Run:
   StepKey: "ctrl r"
   RunKey: "ctrl x"
+
+IO:
+  BlockingInput: true

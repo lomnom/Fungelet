@@ -76,7 +76,8 @@ def modInit(m,config,lock):
 				plane=m.load.funge.plane
 				for y in range(len(data)):
 					for x in range(len(data[0])):
-						plane[fng.Vect2d(cursor.cursor.x+x,cursor.cursor.y+y)]=data[y][x]
+						if data[y][x] is not None:
+							plane[fng.Vect2d(cursor.cursor.x+x,cursor.cursor.y+y)]=data[y][x]
 				statusText(f"Grabber: *Placed*")
 				if key==config["DropKey"]:
 					state="None"

@@ -13,7 +13,7 @@ python3 Run.py
 (pretty self-explanatory but will make a demo video when a stable release is created) 
 befunge examples [here](http://www.nsl.com/k/befunge93/index.html)
 
-## Documentation 
+## (Dev) Documentation 
 As it is unlikely that there will ever be a substantial number of developers wanting to contribute to or extend this application, I have chosen not to write documentation. Please feel free to contact me at `zhaoxiong.ang@gmail.com` for any queries and explanations related to this application's code.
 
 ## Screenshot

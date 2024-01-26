@@ -13,7 +13,7 @@ def highlightMod(rendered,character,*args):
 		if flashingQuestionMark:
 			rendered.char="?"
 			rendered.flags|={'f'}
-		rendered.bcolor=str(character%256)
+		rendered.bcolor=str(character%255+1)
 		rendered.flags|={'i'}
 
 enabled=None

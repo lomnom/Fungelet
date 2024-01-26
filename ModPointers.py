@@ -106,16 +106,6 @@ def cursorPossess(*_):
 	else:
 		statusText("No pointer to possess")
 
-homeIntr=ti.Group(
-	spawnButton,
-	possessButton
-)
-
-homeGroup=tui.VStack(
-	spawnButton,
-	possessButton
-)
-
 class Stack(tui.GenElement): #todo: have a less crude thread safety solution (stack is one render behind)
 	def __init__(self,pointer):
 		self.pointer=pointer
@@ -203,7 +193,7 @@ class InspectorView(tui.GenElement):
 		if showing:
 			return possessedView
 		else:
-			return tui.Text("Possess a cursor to view\n(In pointers screen)")
+			return tui.Text("Possess a cursor to view info")
 
 killButton=ti.Button("kill possessed",'K')
 @killButton.onPress
@@ -236,20 +226,19 @@ def modInit(modules,config,lock):
 	screen=modules.fungescreen.display
 	screen.markers.append(display)
 
-	spawnBar=sidebar.Sidebar("Pointers",homeGroup,homeIntr)
-	sidebar.addSidebar(spawnBar)
-
 	# p=newPointer()
 	# p.stack=list(bytes("hello world!".encode("ascii")))+[1,2,4,8,16,8,4,2,1]
 	inspectorBar=sidebar.Sidebar(
-		"Possessed",
+		"Pointers",
 		tui.VStack(
-			killButton,
-			clearButton,
-			tui.Text("Press w and s to scroll `(w,s)`"),
 			(scrollView:=tui.ScrollBox(
 				tui.VStack(
-					InspectorView(),
+					spawnButton,
+					possessButton,
+					killButton,
+					clearButton,
+					tui.Text("Press w and s to scroll `(w,s)`"),
+					InspectorView().pad(top=1),
 					tui.Nothing(height=10)
 				),
 				style=[False,False,False,True],
@@ -259,7 +248,9 @@ def modInit(modules,config,lock):
 		,ti.Group(
 			killButton,
 			clearButton,
-			ti.scrollerInput(scrollView.scroller,modules.ui.root.frames,inputs=["w","s",None,None])
+			ti.scrollerInput(scrollView.scroller,modules.ui.root.frames,inputs=["w","s",None,None]),
+			spawnButton,
+			possessButton
 		)
 	)
 	sidebar.addSidebar(inspectorBar)

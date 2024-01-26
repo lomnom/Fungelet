@@ -24,7 +24,7 @@ def goto(c,d):
 		callback(c,d)
 
 def step(certain=False):
-	places=fng.nextPlaces(cursor,cursorDelta,instrs,plane,zerotick=(plane[cursor]==plane.defaultValue))
+	places=list(instrs[plane[cursor]].transforms(cursorDelta.copy(),cursor.copy(),plane))
 	if len(places)==0:
 		return True
 	if len(places)>1 and certain:
@@ -37,8 +37,9 @@ def step(certain=False):
 movement=ti.Listener()
 @movement.handle
 def key(key):
+	global cursor
 	if key==cfg["Step"]:
-		step()
+		step(certain=True)
 		root.frames.schedule(
 			1,tui.sched.framesLater
 		)

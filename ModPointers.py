@@ -22,8 +22,8 @@ def focus(pointer):
 
 def cursorMoved(c,d):
 	if focused:
-		focused.pos=c
-		focused.delta=d
+		focused._pos=c
+		focused._delta=d
 
 class BfPointerN(bfg.BfPointer):
 	@property

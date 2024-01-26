@@ -49,7 +49,7 @@ def dumpBf(plane):
 		if row:
 			for x in sorted(row.keys()):
 				output+=" "*((x-prevX)-1)
-				output+=chr(row[x])
+				output+=chr(row[x]) if row[x]>0 else "!"
 				prevX=x
 		output+="\n"
 	return output[:-1]

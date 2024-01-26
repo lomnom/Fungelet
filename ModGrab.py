@@ -62,10 +62,13 @@ def modInit(m,config,lock):
 				for y in matrix:
 					if end.y>=y>=start.y:
 						row=matrix[y]
+						toClear=[]
 						for x in row:
 							if end.x>=x>=start.x:
 								data[y-start.y][x-start.x]=row[x]
-								row[x]=32
+								toClear.append(x)
+						for x in toClear:
+							del row[x]
 				state="Selected"
 				statusText(f"Grabber: *Selected* - use *{config['PlaceKey']}* to place or *{config['DropKey']}* to drop")
 			elif state=="Selected":

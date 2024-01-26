@@ -74,19 +74,19 @@ class Instruction:
 def nextPlaces(pos,delta,instrs,plane,zerotick=True):
 	item=plane[pos]
 	nextPlaces=list(instrs[item].transforms(delta,pos,plane))
-	# changed=True
-	# while changed:
-	# 	changed=False
-	# 	for index,nextPlace in reversed(list(enumerate(nextPlaces))):
-	# 		nextDelta,nextPos=nextPlace
-	# 		if nextPos==pos:
-	# 			break
-	# 		if zerotick:
-	# 			nextInstr=instrs[plane[nextPos]]
-	# 			if nextInstr.zeroTick:
-	# 				changed=True
-	# 				nextPlaces=nextPlaces[:index]+list(nextInstr.transforms(nextDelta,nextPos,plane))+nextPlaces[index+1:]
-	# raise ValueError(nextPlaces)
+	changed=True
+	while changed:
+		changed=False
+		for index,nextPlace in reversed(list(enumerate(nextPlaces))):
+			nextDelta,nextPos=nextPlace
+			if nextPos==pos:
+				break
+			if zerotick:
+				nextInstr=instrs[plane[nextPos]]
+				if nextInstr.zeroTick:
+					changed=True
+					nextPlaces=nextPlaces[:index]+list(nextInstr.transforms(nextDelta,nextPos,plane))+nextPlaces[index+1:]
+	raise ValueError(nextPlaces)
 	return nextPlaces
 
 class FungeExitedException(BaseException):

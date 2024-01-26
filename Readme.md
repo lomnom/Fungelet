@@ -6,6 +6,7 @@ cd Fungelet
 git clone https://github.com/lomnom/Terminal/
 mv Terminal/Term*.py .
 rm -rf Terminal
+pip3 install pyyaml
 python3 Run.py
 ```
 ## Usage

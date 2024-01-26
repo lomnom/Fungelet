@@ -59,16 +59,16 @@ def modInit(m,config,lock):
 				if start.y>end.y:
 					start.y,end.y=(end.y,start.y)
 				data=[[None for _ in range(end.x-start.x+1)] for _ in range(end.y-start.y+1)]
+				toClear=[]
 				for y in matrix:
 					if end.y>=y>=start.y:
 						row=matrix[y]
-						toClear=[]
 						for x in row:
 							if end.x>=x>=start.x:
 								data[y-start.y][x-start.x]=row[x]
-								toClear.append(x)
-						for x in toClear:
-							del row[x]
+								toClear.append((x,y))
+				for coord in toClear:
+					del m.load.funge.plane[fng.Vect2d(*coord)]
 				state="Selected"
 				statusText(f"Grabber: *Selected* - use *{config['PlaceKey']}* to place or *{config['DropKey']}* to drop")
 			elif state=="Selected":

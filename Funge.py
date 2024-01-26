@@ -212,7 +212,7 @@ class Space2d(Space):
 		row=self.matrix.get(coord.y)
 		if row:
 			val=row.pop(coord.x,None)
-			if val:
+			if val is not None:
 				if not row:
 					del self.matrix[coord.y]
 					keys=self.matrix.keys()
@@ -221,7 +221,7 @@ class Space2d(Space):
 					elif coord.y==self.maxY:
 						self.maxY=max(keys)
 					elif coord.y==self.minY:
-						self.maxY=min(keys)
+						self.mixY=min(keys)
 				if self.matrix:
 					if coord.x==self.maxX:
 						maxes=[max(row) for row in self.matrix.values()]

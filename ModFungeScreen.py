@@ -6,14 +6,13 @@ from Befunge import befunge2d as bf
 class BfSpaceDisplay(tui.Element):
 	def __init__(
 		self,space,where=lambda rx,ry,ph,pw: (0,0), uniqueBg=False,
-		markers=[],modifiers=[],changers=[]
+		markers=[],modifiers=[]
 	): 
 		self.space=space
 		self.where=where
 		self.markers=markers
 		self.modifiers=modifiers
 		self.uniqueBg=uniqueBg
-		self.changers=changers
 
 	def size(self):
 		return (0,0)
@@ -32,7 +31,7 @@ class BfSpaceDisplay(tui.Element):
 							if self.uniqueBg:
 								rendered.bcolor=str(character%256)
 						for modifier in self.modifiers:
-							modifier(rendered,character,(x,y),(ry+y,rx+x),(cy,cx))
+							modifier(rendered,character,(y,x),(ry+y,rx+x),(cy,cx))
 
 		for markers in self.markers:
 			for marker in markers():
@@ -40,9 +39,6 @@ class BfSpaceDisplay(tui.Element):
 				if (cx+pw)>mx>=(cx) and (cy+ph)>my>=(cy):
 					rendered=cnv.matrix[ry+(my-cy)][rx+(mx-cx)]
 					func(rendered)
-
-		for changer in self.changers:
-			changer(rx,ry,ph,pw,cx,cy,cnv)
 
 def originMarker():
 	def originMod(char):

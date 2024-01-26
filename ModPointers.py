@@ -214,6 +214,15 @@ def kill(*_):
 	else:
 		statusText(f"No pointer possessed!")
 
+clearButton=ti.Button("clear stack",'C')
+@clearButton.onPress
+def clear(*_):
+	if focused:
+		statusText(f"Stack cleared.")
+		focused.stack.clear()
+	else:
+		statusText(f"No pointer possessed!")
+
 def modInit(modules,config,lock):
 	global funge,cursor,pointers,statusText
 	funge=modules.load.funge
@@ -236,6 +245,7 @@ def modInit(modules,config,lock):
 		"Possessed",
 		tui.VStack(
 			killButton,
+			clearButton,
 			tui.Text("Press w and s to scroll `(w,s)`"),
 			(scrollView:=tui.ScrollBox(
 				tui.VStack(
@@ -248,6 +258,7 @@ def modInit(modules,config,lock):
 		)
 		,ti.Group(
 			killButton,
+			clearButton,
 			ti.scrollerInput(scrollView.scroller,modules.ui.root.frames,inputs=["w","s",None,None])
 		)
 	)

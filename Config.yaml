@@ -54,3 +54,8 @@ Run:
 
 IO:
   BlockingInput: true
+
+Grab:
+  GrabKey: "ctrl c"
+  PlaceKey: "ctrl p"
+  DropKey: "ctrl d"

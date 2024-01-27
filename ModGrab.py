@@ -48,10 +48,12 @@ def modInit(m,config,lock):
 	def handle(key):
 		global state,corner,data,rotation,origData
 		if key==config["GrabKey"]:
+			# start selecting
 			if state=="None":
 				corner=cursor.cursor.copy()
 				state="Selecting"
 				statusText(f"Grabber: *Selecting*")
+			# select
 			elif state=="Selecting":
 				matrix=m.load.funge.plane.matrix
 				start=corner.copy()
@@ -75,6 +77,7 @@ def modInit(m,config,lock):
 				origData=data
 				statusText(f"Grabber: *Selected* - use *{config['PlaceKey']}* to place or *{config['DropKey']}* to drop")
 			elif state=="Selected":
+				# rotate
 				rotation+=1
 				rotation=rotation%4
 				if rotation==0:
@@ -105,6 +108,7 @@ def modInit(m,config,lock):
 				statusText(f"Grabber: *Rotated*"+ (" Warn - Could not rotate function" if not functional else ""))
 		elif key==config["PlaceKey"] or key==config["DropKey"]:
 			if state=="Selected":
+				# place & drop
 				plane=m.load.funge.plane
 				for y in range(len(data)):
 					for x in range(len(data[0])):
@@ -115,6 +119,27 @@ def modInit(m,config,lock):
 					state="None"
 					data=None
 					statusText(f"Grabber: *Dropped*")
+			elif state=="Selecting" and key==config["DropKey"]:
+				# clear
+				matrix=m.load.funge.plane.matrix
+				start=corner.copy()
+				end=cursor.cursor.copy()
+				if start.x>end.x:
+					start.x,end.x=(end.x,start.x)
+				if start.y>end.y:
+					start.y,end.y=(end.y,start.y)
+				toClear=[]
+				for y in matrix:
+					if end.y>=y>=start.y:
+						row=matrix[y]
+						for x in row:
+							if end.x>=x>=start.x:
+								toClear.append((x,y))
+				for coord in toClear:
+					del m.load.funge.plane[fng.Vect2d(*coord)]
+				state="None"
+				data=None
+				statusText("Drabber: *Erased*")
 			else:
 				statusText("Select something with *ctrl c* first!")
 

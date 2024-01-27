@@ -35,6 +35,8 @@ def selectedMarkers():
 state="None"
 corner=None
 data=None
+origData=None
+rotation=0
 def modInit(m,config,lock):
 	global cursor
 	cursor=m.cursor
@@ -44,7 +46,7 @@ def modInit(m,config,lock):
 	listener=ti.Listener()
 	@listener.handle
 	def handle(key):
-		global state,corner,data
+		global state,corner,data,rotation,origData
 		if key==config["GrabKey"]:
 			if state=="None":
 				corner=cursor.cursor.copy()
@@ -70,10 +72,37 @@ def modInit(m,config,lock):
 				for coord in toClear:
 					del m.load.funge.plane[fng.Vect2d(*coord)]
 				state="Selected"
+				origData=data
 				statusText(f"Grabber: *Selected* - use *{config['PlaceKey']}* to place or *{config['DropKey']}* to drop")
 			elif state=="Selected":
-				data=list(zip(*data[::-1]))
-				statusText(f"Grabber: *Rotated*") #todo: implement smart rotation
+				rotation+=1
+				rotation=rotation%4
+				if rotation==0:
+					data=origData
+					statusText(f"Grabber: *Rotated*")
+					return
+				else:
+					data=origData
+					for _ in range(rotation):
+						data=list(zip(*data[::-1]))
+					for row in range(len(data)):
+						data[row]=list(data[row])
+				functional=True
+				for row in range(len(data)):
+					for col in range(len(data[0])):
+						val=data[row][col]
+						if val is not None:
+							table=None
+							for line in bf.rotations:
+								if chr(val) in line:
+									table=line
+							if table:
+								transformed=table[(table.index(chr(val))+rotation)%4]
+								if transformed is None:
+									functional=False
+								else:
+									data[row][col]=ord(transformed)
+				statusText(f"Grabber: *Rotated*"+ (" Warn - Could not rotate function" if not functional else ""))
 		elif key==config["PlaceKey"] or key==config["DropKey"]:
 			if state=="Selected":
 				plane=m.load.funge.plane

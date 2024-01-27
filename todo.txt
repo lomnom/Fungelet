@@ -6,3 +6,7 @@ todo: freezing seperate pointers
 todo: dont close with unsaved info
 
 todo: stackstack**
+
+todo: cmdline args
+todo(?): mirroring selected
+todo: tutorial

@@ -9,6 +9,8 @@ class Instructions(dict):
 		global defaultInstr
 		return super().get(item,defaultInstr)
 
+rotations=[] #90-degree rotations
+
 befunge2d=Instructions()
 def befunge2dInstr(instruction):
 	befunge2d[ord(instruction.symbol)]=instruction
@@ -266,6 +268,8 @@ dirChgInstr(
 	lambda delta: Vect2d.south
 )
 
+rotations.append([">","v","<","^"])
+
 # Relative direction changes
 dirChgInstr(
 	"]","Turn Right","Turn 90 degrees clockwise",
@@ -440,6 +444,8 @@ def transforms(instr,delta,position,space):
 	yield (Vect2d.south,position+Vect2d.south)
 	yield (Vect2d.north,position+Vect2d.north)
 befunge2dInstr(nsIf)
+
+rotations.append(["_","|",None,None])
 
 nsIf=Instruction('w',"Compare","Pops b then a. if a<b, act like [, if a>b, act like ], no effect if a==b.","Logic")
 @nsIf.runner

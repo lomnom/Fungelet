@@ -565,7 +565,7 @@ def INNUM():
 	else:
 		return None
 
-OUTCHAR=lambda c: stdout(chr(c))
+OUTCHAR=lambda c: stdout(chr(c) if c>0 else "?")
 def INCHAR():
 	getInput()
 	global buffer

@@ -108,3 +108,6 @@ i. Tooltips: if you forget instructions.
      automatically entered into the textbox.
  - Please submit bug reports for bugs or feature
      suggestions.
+ - Open a file from the cli with python3 Run.py [file],
+     run it bare with python3 Run.py and open this
+     tutorial with python3 Run.py -h

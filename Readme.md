@@ -78,6 +78,7 @@ python3 Run.py
  - Ctrl w to quit.
  - If there is only one file in pwd, it will be automatically entered into the textbox.
  - Please submit bug reports for bugs or feature suggestions.
+ - Open a file from the cli with `python3 Run.py [file]`, run it bare with `python3 Run.py` and open this tutorial with `python3 Run.py -h`
 befunge examples [here](http://www.nsl.com/k/befunge93/index.html)
 
 ## (Dev) Documentation 

@@ -1,0 +1,110 @@
+>"!telegnuF rof lairotuT">,:#v_@
+                         ^   <
+
+Welcome to the Fungelet tutorial!
+This document aims to give a quickly teach everything
+  on the usage of Fungelet in a quick and hands on manner.
+Note: ctrl-h to toggle highlighting for readability.
+
+1. Movement                                                               v        <
+ - Use the arrow keys to move around and turn.                                     ^  v  z<
+ - Use the enter key to jump where a cursor would.     Try enter here->  >>1122  ,.|  >   ^
+   The enter key does nothing if there are multiple                                @
+     options.                                                     Tip: take advantage of wrapping
+                                                                       and warp over whitespace with
+2. Status Text: the text on the bottom left.                           enter.
+ - The first part will always have the format of
+   > At (x,y) = value, moving (dx,dy)
+ - The second part will usually show documentation of
+     the tile the cursor is on, but also shows other
+     messages depending on context.
+
+3. The sidebar on the right
+ - Use shift left and shift right to change sidebar
+ - Every sidebar has its own utility.
+
+i. Tooltips: if you forget instructions.
+ - Use ctrl t to summon tooltips.                     Try looking for the random direction instr.
+ - Use arrow keys to move, and enter to place char.
+ - Every colour is a different category.
+ - Use ctrl t again to close.
+
+4. Editing: The fifth sidebar
+ - While in the fifth sidebar, you can type to place
+   tiles.
+ - Notice that the cursor deduces where to go like    Try typing here->
+     the enter key.                                   (Try >^v<@|_w12[]#)
+ - Disable this movement by pressing tab.
+ - Use the backspace to delete the tile behind the
+     cursor, and space to delete in front.
+ - Press ctrl l to type a number and ctrl k to place.
+     (Note that non-ascii values are displayed as
+      coloured rectangles.)
+
+5. Grabbing: The copy-paste & rotate
+ - Press ctrl c at a corner then move to an opposite  Try grabbing here->        >zzzzzzv
+   corner to highlight the area.                                                        z
+             - Here you have two choices -                 >    v     >zzzz_v           z
+ a. Press ctrl d to delete the area                        v    <                       z
+                       - or -                              >    v                       z
+ b. Press ctrl c to grab the area.                         v    <                       >zzzz
+    - From here, you can                                   >
+    a. keep pressing ctrl c to rotate the area
+         (StatusText will warn if rotation is
+          not functional)
+    b. press ctrl p to place down a copy of
+       the area without deselecting                   Tip: the clipboard is not cleared when loading another file.
+    c. press ctrl d to place down the area and
+       deselect.
+
+6. Execution: The third sidebar
+ - Press ctrl l to type a number in the speed
+     box.
+ - Press ctrl x (works in any sidebar) to run.        Tip: You can stil edit and do anything while running.
+ - Press ctrl r (works in any sidebar) to step.
+
+7. Pointers: The second sidebar.
+ - Press S to spawn a pointer.                        Try spawning here-> >"!telegnuF rof lairotuT">,:#v_@
+ - Notice the pointer is a struckthrough block.           and IO                                   ^   <
+ - The pointer is posessed right after you                                          v
+     spawn it.                                                                    v<t>v
+ - When posessed,                                                                 "   "
+   - You can see the stack (scroll with w,s)          Try ctrl x and              d   !
+   - You can clear the stack with C                       ctrl r.                 r   l
+   - You can kill the pointer with K                                              w   o
+   - The pointer and cursor coords and delta are                                  o
+       synchronised.                                                              l   l
+ - You can unposess a pointer by pressing P, and                                  h   e
+    also posess a pointer at the same position                                    "   "
+    as the cursor by pressing P.                      read IO first               v  <v  <
+ Note: pointers with a lower #id run first.                    v                  >,:|>,:|
+                                                               z                     @   @
+8. I/O: The fourth sidebar.                                    z
+ - This is where stdin and stdout happens.                     z
+ - ctrl l to type in the input box.                <zzzzzzzzzzz<
+ - C and c to clear input and output
+     respectively.
+ - w and s to scroll.
+
+9. Files: The first sidebar.
+ - This is where you load and save.
+ - Use ctrl L to enter the filename.
+ - Use S to save to file, and L to load from
+     file.
+ - Saving an empty plane is stopped, and loading
+   to a non-empty plane needs confirmation.
+ - Press C five times to clear.
+
+0. Misc.
+ - Non ascii values are rendered as coloured          Try this: >088*aa*p>88*aa*g:88*1++aa*pv
+     rectangles of ansi colour val%255+1                                 ^  p*aa*88+1g*aa*88<
+ - Input is non blocking by default. Change                     a
+     BlockingInput to true in config.yaml for
+     blocking input.
+ - Most global keys are reconfigurable in config
+     .yaml.
+ - Ctrl w to quit.
+ - If there is only one file in pwd, it will be
+     automatically entered into the textbox.
+ - Please submit bug reports for bugs or feature
+     suggestions.

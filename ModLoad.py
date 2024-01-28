@@ -4,6 +4,7 @@ import TermCanvas as tc
 import Funge as fng
 import Befunge as bng
 import pathlib
+from sys import argv
 
 fileIn=ti.Textbox("ctrl l")
 loadButton=ti.Button("load","L")
@@ -116,3 +117,19 @@ def modInit(m,config,lock):
 
 	sidebar=m.sidebar.Sidebar("File",visual,interactives)
 	m.sidebar.addSidebar(sidebar)
+
+	if len(argv)>1:
+		if argv[1] in ["-h","--help","-help"]:
+			cont=open("Tutorial.b98",'r').read()
+			loadBf(cont,funge.plane,0,0)
+			modules.statustext.queueText("Tutorial opened.")
+		else:
+			file=runpath+"/"+argv[1]
+			try:
+				cont=open(file,'r').read()
+			except:
+				modules.statustext.queueText(f"File '*{file}*' inaccessible!")
+				return
+			loadBf(cont,funge.plane,0,0)
+			modules.statustext.queueText(f"{file} opened.")
+			fileIn.text=argv[1]

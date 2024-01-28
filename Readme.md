@@ -9,6 +9,8 @@ rm -rf Terminal
 pip3 install pyyaml
 python3 Run.py
 ```
+- Works on Mac and linux natively
+- Tested in WSL (use a good terminal tho)
 ## Usage
 #### Note: It is strongly recommended to follow along with this hands-on guide by running `python3 Run.py -h`!
 1. Movement

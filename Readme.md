@@ -7,7 +7,7 @@ git clone https://github.com/lomnom/Terminal/
 mv Terminal/Term*.py .
 rm -rf Terminal
 pip3 install pyyaml
-python3 Run.py
+python3 Run.py -h
 ```
 - Works on Mac and linux natively
 - Tested in WSL (use a good terminal tho)

@@ -99,7 +99,7 @@ def modInit(m,config,lock):
 				tooltip.x=oldx
 				tooltip.y=oldy
 			instr=bf.befunge2d[ord(tooltip.string[tooltip.x][tooltip.y])]
-			m.statustext.queueText(f"*[{instr.theme}]* - \033{instr.description} \033")
+			m.statustext.queueText(f"*[{instr.theme}]* `({ord(instr.symbol)})` - \033{instr.description} \033")
 			m.ui.root.frames.schedule(
 				1,tui.sched.framesLater
 			)

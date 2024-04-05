@@ -95,7 +95,7 @@ def bfInChar():
 bf.INCHAR=bfInChar
 
 def modInit(m,config,lock):
-	global modules,bl
+	global modules,bl,blockingInput
 
 	blockingInput=bool(config["BlockingInput"])
 	def inputNotify(e,tick):

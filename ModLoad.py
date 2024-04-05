@@ -1,10 +1,12 @@
 import TermUI as tui 
 import TermIntr as ti
 import TermCanvas as tc
+import Terminal as trm
 import Funge as fng
 import Befunge as bng
 import pathlib
 from sys import argv
+import os
 
 fileIn=ti.Textbox("ctrl l")
 loadButton=ti.Button("load","L")
@@ -132,6 +134,23 @@ def modInit(m,config,lock):
 
 	sidebar=m.sidebar.Sidebar("File",visual,interactives)
 	m.sidebar.addSidebar(sidebar)
+	def onCrash(a,b,c):
+		data=dumpBf(funge.plane)
+		open("cRasHdAtA.b98",'w').write(data)
+		print(trm.fred+trm.bold+trm.flashing+trm.italic+
+			"THE CODE IS SAVED IN cRasHdAtA.b98! RUN THIS APPLICATION AGAIN TO LOAD IT AUTOMATICALLY!"+trm.reset
+		)
+
+	tc.crashCallbacks.append(onCrash)
+
+	if os.path.isfile("cRasHdAtA.b98"):
+		cont=open("cRasHdAtA.b98",'r').read()
+		os.remove("cRasHdAtA.b98")
+		loadBf(cont,funge.plane,0,0)
+		for cb in onLoad:
+			cb("cRasHdAtA.b98")
+		modules.statustext.queueText(f"Restored from last crash.")
+		return
 
 	if len(argv)>1:
 		if argv[1] in ["-h","--help","-help"]:

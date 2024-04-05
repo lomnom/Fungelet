@@ -9,4 +9,3 @@ todo: stackstack**
 
 todo: cmdline args
 todo(?): mirroring selected
-todo: tutorial

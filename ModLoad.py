@@ -10,6 +10,7 @@ fileIn=ti.Textbox("ctrl l")
 loadButton=ti.Button("load","L")
 saveButton=ti.Button("save","S")
 clearButton=ti.Button("clear","C")
+killButton=ti.Button("kill","K")
 
 onLoad=[]
 onSave=[]
@@ -18,7 +19,8 @@ interactives=ti.Group(
 	clearButton,
 	fileIn,
 	loadButton,
-	saveButton
+	saveButton,
+	killButton
 )
 visual=tui.VStack(
 	tui.HStack(
@@ -27,7 +29,8 @@ visual=tui.VStack(
 	),
 	loadButton,
 	saveButton,
-	clearButton
+	clearButton,
+	killButton
 )
 
 funge=None
@@ -103,6 +106,18 @@ def clear(*args):
 		clearTries=0
 	else:
 		modules.statustext.queueText(f"Press {5-clearTries} more times to clear")
+
+killTries=0
+@killButton.onPress
+def kill(*args):
+	global killTries
+	killTries+=1
+	if killTries==2:
+		funge.pointers.clear()
+		modules.statustext.queueText("Killed!")
+		killTries=0
+	else:
+		modules.statustext.queueText(f"Press {2-killTries} more times to clear")
 
 def modInit(m,config,lock):
 	global funge,modules,sidebar,runpath

@@ -99,7 +99,7 @@ def modInit(m,config,lock):
 
 	blockingInput=bool(config["BlockingInput"])
 	def inputNotify(e,tick):
-		if e.args[0]==input:
+		if e and e.args[0]==input:
 			m.statustext.queueText("Input required! Restart execution once entered!")
 
 	m.run.endCalls.append(inputNotify)

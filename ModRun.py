@@ -15,7 +15,6 @@ endCalls=[
 	) if tick>=0 else "Stepped!"
 ]
 
-# when q used, other pointers execute first before exiting. fix?
 ceil=lambda n: round(n+0.5)
 stopped=None
 def runner(delay,renderSpace=0.05): #time between render calls
@@ -27,7 +26,7 @@ def runner(delay,renderSpace=0.05): #time between render calls
 	exception=None # becomes something when ending
 	while executing and quitLock.locked():
 		tick+=1
-		for pointer in (funge.pointers[:] if not stopped else funge.pointers[funge.pointers.index(stopped):]):
+		for pointer in (funge.pointers[funge.pointers.index(stopped):] if stopped and stopped in funge.pointers else funge.pointers[:]):
 			try:
 				pointer.step()
 			except bf.FungeExitedException as e:

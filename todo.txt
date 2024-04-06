@@ -8,3 +8,42 @@ todo: stackstack**
 
 todo: cmdline args
 todo(?): mirroring selected
+
+todo: number converter
+values="0123456789abcdef"
+def numberToBefunge(num): #Basically does a base-15 thing
+	if num==0:
+		return '0'
+	if num<0:
+		result="0"
+		negative=True
+	else:
+		result=""
+		negative=False
+	num=abs(num)
+	place=0
+	numBefore=False
+	while num!=0:
+		if place==0:
+			value=num%15
+			num-=value
+			if value!=0:
+				result+=values[value]
+				numBefore=True
+		else:
+			value=(num%(15**(place+1)))
+			num-=value
+			value=value//(15**place)
+			if value!=0:
+				result+='f'
+				if (place>1):
+					result+="f*"*(place-1)
+				if value!=1:
+					result+=values[value]+'*'
+				if numBefore:
+					result+="+"
+				numBefore=True
+		place+=1
+	if negative:
+		result+='-'
+	return result

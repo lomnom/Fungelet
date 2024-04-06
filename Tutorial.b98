@@ -35,23 +35,23 @@ i. Tooltips: if you forget instructions.
  - Notice that the cursor deduces where to go like    Try typing here->
      the enter key.                                   (Try >^v<@|_w12[]#)
  - Disable this movement by pressing tab. Now the
-     cursor will just move forward one delta.
- - Use the backspace to delete the tile behind the
-     cursor, and space to delete in front.
- - Press ctrl l to type a number and ctrl k to place.
+     cursor will just move forward one delta.          asdv
+ - Use the backspace to delete the tile behind the      v_<
+     cursor, and space to delete in front.            dddd>>><<<
+ - Press ctrl l to type a number and ctrl k to place     !
      (Note that non-ascii values are displayed as
       coloured rectangles.)
 
 5. Grabbing: The copy-paste & rotate
  - Press ctrl c at a corner then move to an opposite  Try grabbing here->        >zzzzzzv
    corner to highlight the area.                                                        z
-             - Here you have two choices -                 >    v     >zzzz_v           z
- a. Press ctrl d to delete the area                        v    <                       z
-                       - or -                              >    v                       z
- b. Press ctrl c to grab the area.                         v    <                       >zzzz
-    - From here, you can                                   >
-    a. keep pressing ctrl c to rotate the area
-         (StatusText will warn if rotation is
+             - Here you have two choices -                            >zzzz_v           z
+ a. Press ctrl d to delete the area                                                     z
+                       - or -                                      ^                    z
+ b. Press ctrl c to grab the area.                              <  >                    >zzzz
+    - From here, you can                                   >       ^
+    a. keep pressing ctrl c to rotate the area             >       ^
+         (StatusText will warn if rotation is              >       ^
           not functional)
     b. press ctrl p to place down a copy of
        the area without deselecting                   Tip: the clipboard is not cleared when loading another file.
@@ -67,22 +67,22 @@ i. Tooltips: if you forget instructions.
 7. Pointers: The second sidebar.
  - Press S to spawn a pointer.                        Try spawning here-> >"!telegnuF rof lairotuT">,:#v_@
  - Notice the pointer is a struckthrough block.           and IO                                   ^   <
- - The pointer is posessed right after you                                          v
-     spawn it.                                                                    v<t>v
- - When posessed,                                                                 "   "
-   - You can see the stack (scroll with w,s)          Try ctrl x and              d   !
-   - You can clear the stack with C                       ctrl r.                 r   l
-   - You can kill the pointer with K                                              w   o
-   - The pointer and cursor coords and delta are                                  o
-       synchronised.                                                              l   l
- - You can unposess a pointer by pressing P, and                                  h   e
-    also posess a pointer at the same position                                    "   "
-    as the cursor by pressing P.                      read IO first               v  <v  <
- Note: pointers with a lower #id run first.                    v                  >,:|>,:|
-                                                               z                     @   @
-8. I/O: The fourth sidebar.                                    z
- - This is where stdin and stdout happens.                     z
- - ctrl l to type in the input box.                <zzzzzzzzzzz<
+ - The pointer is posessed right after you
+     spawn it.
+ - When posessed,                                                     v
+   - You can see the stack (scroll with w,s)          Try ctrl x and  t
+   - You can clear the stack with C                       ctrl r.     > v
+   - You can kill the pointer with K                                    "
+   - The pointer and cursor coords and delta are                        !
+       synchronised.                                                    l
+ - You can unposess a pointer by pressing P, and                        o
+    also posess a pointer at the same position
+    as the cursor by pressing P.                      read IO first     l
+ Note: pointers with a lower #id run first.                    v        e
+                                                               z        "
+8. I/O: The fourth sidebar.                                    z        v  <
+ - This is where stdin and stdout happens.                     z        >,:|
+ - ctrl l to type in the input box.                <zzzzzzzzzzz<           @
  - C and c to clear input and output
      respectively.
  - w and s to scroll.

@@ -96,6 +96,7 @@ def modInit(m,config,lock):
 			except bf.FungeExitedException as e:
 				for call in endCalls:
 					call(e,-1)
+			m.ui.root.frames.schedule(2,tui.sched.framesLater)
 		elif key==config["RunKey"]:
 			if not executing:
 				message(f"Execution started at {round(float(rateInput.text))} ticks per second")

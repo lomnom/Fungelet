@@ -35,6 +35,14 @@ class BfPointerN(bfg.BfPointer):
 		self._pos=value
 		pointerMoved(self)
 
+	@property
+	def delta(self):
+		return self._delta
+
+	@delta.setter
+	def delta(self,value):
+		self._delta=value
+
 def pointer():
 	return BfPointerN(funge,fng.Vect2d(0,0),fng.Vect2d(1,0),[],[],fng.Vect2d(0,0))
 
@@ -63,8 +71,8 @@ possessCb=[]
 def possess(pointer):
 	global focused
 	focused=pointer
-	focused.pos=cursor.cursor
-	focused.delta=cursor.cursorDelta
+	focused._pos=cursor.cursor
+	focused._delta=cursor.cursorDelta
 	for cb in possessCb:
 		cb(pointer)
 

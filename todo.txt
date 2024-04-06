@@ -1,7 +1,6 @@
-todo: snapshots/states
+todo: snapshots/states (undo/redo)
 
 todo: paths 
-todo: autosave
 todo: freezing seperate pointers
 todo: dont close with unsaved info
 

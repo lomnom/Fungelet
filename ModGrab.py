@@ -139,7 +139,7 @@ def modInit(m,config,lock):
 					del m.load.funge.plane[fng.Vect2d(*coord)]
 				state="None"
 				data=None
-				statusText("Drabber: *Erased*")
+				statusText("Grabber: *Erased*")
 			else:
 				statusText("Select something with *ctrl c* first!")
 

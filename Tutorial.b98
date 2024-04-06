@@ -34,7 +34,8 @@ i. Tooltips: if you forget instructions.
    tiles.
  - Notice that the cursor deduces where to go like    Try typing here->
      the enter key.                                   (Try >^v<@|_w12[]#)
- - Disable this movement by pressing tab.
+ - Disable this movement by pressing tab. Now the
+     cursor will just move forward one delta.
  - Use the backspace to delete the tile behind the
      cursor, and space to delete in front.
  - Press ctrl l to type a number and ctrl k to place.

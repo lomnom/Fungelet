@@ -6,7 +6,7 @@ import TermUI as tui
 plane=None
 cursor=None
 
-moveButton=ti.Button("toggle automove","tab",toggle=True,activated=True)
+moveButton=ti.Button("toggle smartmove","tab",toggle=True,activated=True)
 listener=ti.Listener()
 @listener.handle
 def handler(key):
@@ -15,7 +15,9 @@ def handler(key):
 			return
 		else:
 			plane[cursor.cursor]=ord(key)
-			if moveButton.activated and (
+			if not moveButton.activated:
+				cursor.cursor+=cursor.cursorDelta
+			elif (
 				key==" " or ord(key) not in bfg.befunge2d or (moveButton.activated and not cursor.step(certain=True))
 			):
 				cursor.cursor+=cursor.cursorDelta
@@ -25,6 +27,8 @@ def handler(key):
 				cursor.cursor-=cursor.cursorDelta
 				if plane[cursor.cursor]==plane.defaultValue:
 					cursor.cursor+=cursor.cursorDelta
+		else:
+			cursor.cursor-=cursor.cursorDelta
 		del plane[cursor.cursor]
 	cursor.updateInfo(cursor.cursorDelta,cursor.cursor)
 

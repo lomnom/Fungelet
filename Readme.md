@@ -29,7 +29,7 @@ Features of this include:
 - And many more quality of life features, on top of an almost entirely compliant implementation of befunge.
 
 #### Note: It is strongly recommended to follow along with the hands-on guide by running `python3 Run.py -h`!
-befunge examples [here](http://www.nsl.com/k/befunge93/index.html)
+befunge examples [here](http://www.nsl.com/k/befunge93/index.html). astolfo [here](https://gist.github.com/lomnom/5db8fdd517dc7e57c4aada340ef87ada)
 
 ## (Dev) Documentation 
 As it is unlikely that there will ever be a substantial number of developers wanting to contribute to or extend this application, I have chosen not to write code documentation. Please feel free to contact me at `zhaoxiong.ang@gmail.com` for any queries and explanations related to this application's code.

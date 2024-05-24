@@ -1,6 +1,6 @@
 # Fungelet, a very convenient befunge IDE
 ## Screenshot
-[image](https://cdn.discordapp.com/attachments/881463505755197460/1226180037880057946/Screenshot_2024-04-06_at_10.41.35_PM.png?ex=6623d426&is=66115f26&hm=0c2512edd053d35fcc4fe805d566061613716c8e71f3d3d6cda9beb313db7276&)
+![image-?](https://i.redd.it/bziqy46olvsc1.png)
 
 ## Installation
 ```bash

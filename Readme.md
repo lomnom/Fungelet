@@ -16,7 +16,7 @@ python3 Run.py -h
 - Tested in WSL (use a good terminal tho)
 
 ## Usage
-Tutorial & demonstration [here](https://www.reddit.com/1bxdu7b/)
+Tutorial & demonstration [here](https://www.reddit.com/r/befunge/comments/1bxdu7b/)
 
 Features of this include:
 - Cut, paste, chunk delete and rotate

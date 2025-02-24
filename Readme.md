@@ -1,6 +1,6 @@
 # Fungelet, a very convenient befunge IDE
 ## Screenshot
-![image-?](https://i.redd.it/bziqy46olvsc1.png)
+![image-?](Example.png)
 
 ## Installation
 ```bash
@@ -16,7 +16,7 @@ python3 Run.py -h
 - Tested in WSL (use a good terminal tho)
 
 ## Usage
-<!-- Tutorial & demonstration [here](https://www.reddit.com/r/befunge/comments/1bxdu7b/) -->
+Tutorial & demonstration [here](https://drive.google.com/file/d/1Y6eSMXU-D9mOoyFb6qI2bblmdH0TOXCX/view?usp=sharing)
 
 Features of this include:
 - Cut, paste, chunk delete and rotate

@@ -32,4 +32,4 @@ Features of this include:
 befunge examples [here](http://www.nsl.com/k/befunge93/index.html). astolfo [here](https://gist.github.com/lomnom/5db8fdd517dc7e57c4aada340ef87ada)
 
 ## (Dev) Documentation 
-Please feel free to contact me at `zhaoxiong.ang@gmail.com` for any queries and explanations related to this application's code!
+Please feel free to contact me at `zhaoxiong.ang@gmail.com` for any queries and clarifications related to this application's code!
